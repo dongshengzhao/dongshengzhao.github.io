@@ -1,18 +1,18 @@
-title:            Site Title
-description:      Describe your website here.
+title:            Xianxu's Blog
+description:      Blog for my PhD study!.
 disqus_shortname: hpstrtheme
 reading_time:     true
 words_per_minute: 200
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
 # When testing locally leave blank or use http://localhost:4000
-url:
+url: //houxianxu.github.io
 
 # Owner/author information
 owner:
-  name:           Your Name
+  name:           Xianxu Hou
   avatar:         avatar.jpg
-  bio:            "Your bio goes here. It shouldn't be super long but a good two sentences or two should suffice."
-  email:          you@email.com
+  bio:            "I am Xianxu Hou!"
+  email:          hxianxu@gmail.com
   # Social networking links used in footer. Update and remove as you like.
   twitter:        
   facebook:       
@@ -24,6 +24,7 @@ owner:
   tumblr:         
   # google plus id, include the '+', eg +mmistakes
   google_plus:    +yourid
+  weibo: http://www.weibo.com
 
 # Background image to be tiled on all pages
 background: 
