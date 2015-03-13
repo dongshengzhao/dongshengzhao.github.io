@@ -1,6 +1,6 @@
 title:            Xianxu Hou's Blog
 description:      Blog for my PhD study!.
-disqus_shortname: hpstrtheme
+disqus_shortname: houxianxu
 reading_time:     true
 words_per_minute: 200
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
@@ -11,20 +11,19 @@ url: //houxianxu.github.io
 owner:
   name:           Xianxu Hou
   avatar:         avatar.jpg
-  bio:            "I am Xianxu Hou!"
+  bio:            "A none-CS background student looks forward to explore the CS world!"
   email:          hxianxu@gmail.com
   # Social networking links used in footer. Update and remove as you like.
   twitter:        
   facebook:       
-  github:         
+  github:         https://github.com/houxianxu
   stackexchange:  
   linkedin:       
   instagram:      
   flickr:         
   tumblr:         
   # google plus id, include the '+', eg +mmistakes
-  google_plus:    +yourid
-  weibo: http://www.weibo.com
+  google_plus:    
 
 # Background image to be tiled on all pages
 background: 
@@ -36,7 +35,7 @@ google_verify:
 bing_verify:         
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-timezone:    America/New_York
+timezone:    Europe/London
 future:      true
 highlighter: pygments
 markdown:    kramdown
