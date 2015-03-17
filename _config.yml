@@ -4,6 +4,7 @@ disqus_shortname: houxianxu
 reading_time:     true
 words_per_minute: 200
 exczerpt_separator: <!--more-->
+str_continue_reading: "Continue reading"
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
 # When testing locally leave blank or use http://localhost:4000
 url:              //houxianxu.github.io
@@ -22,7 +23,8 @@ owner:
   linkedin:       
   instagram:      
   flickr:         
-  tumblr:         
+  tumblr:   
+  weibo:          1918210797      
   # google plus id, include the '+', eg +mmistakes
   google_plus:    
 
