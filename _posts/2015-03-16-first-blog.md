@@ -12,15 +12,12 @@ image:
 ## Purpose of this blog
 > The main reason that I want to set up this blog is to help me study machine learning and do research in this area. I believe that it is a very good habit to rethink and rewrite my own interpretation of what I have learned.
 >
-
-
+>
 
 <!--more-->
-
-
-
-> Because of non-cs background, I think it is also an wonderful opportunity to learn something new in CS such as front-end technologies. 
 >
+> Because of non-cs background, I think it is also an wonderful opportunity to learn something new in CS such as front-end technologies. 
+
 ## Logic behind every post
 > Most posts will discuss machine algorithms, of course, there are many good books and tutorials introducing these. However, what I want to do is not just to introduce the alogrithms, instead I assume that one algorithm had not been invented by predecessors, would we be able to come up with the algorithm? 
 >
