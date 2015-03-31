@@ -20,7 +20,7 @@ image:
 
 
 > Because of non-cs background, I think it is also an wonderful opportunity to learn something new in CS such as front-end technologies. 
-
+>
 ## Logic behind every post
 > Most posts will discuss machine algorithms, of course, there are many good books and tutorials introducing these. However, what I want to do is not just to introduce the alogrithms, instead I assume that one algorithm had not been invented by predecessors, would we be able to come up with the algorithm? 
 >
