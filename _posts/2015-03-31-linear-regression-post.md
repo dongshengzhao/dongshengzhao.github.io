@@ -18,6 +18,6 @@ image:
 
 >- Becuase of just two variables, we can simply visualize the data on a scatter plot 
 
-![Scatter Plot of Two variables]({{ site.url }}/images/1.jpg)
+![Scatter Plot of Two variables]({{ site.url }}/images/linearRegression/1.jpg)
 
 ![Smithsonian Image]({{ site.url }}/images/3953273590_704e3899d5_m.jpg)
