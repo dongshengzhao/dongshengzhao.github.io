@@ -43,7 +43,7 @@ image:
 > Above approach directly compute the best w and b based on the property of convex function, and we could ask ourselves is there other ways (say indirectly) to get w and b? Maybe we could firstly inilize w and b randomly, and then try to make it better little by little. By analogy, a blind hiker tries his best to reach the bottom of a hill, specifically try to take a step at every point.
 >
 > - The first approach (Random Local Search) could be try to extend on foot in a random direction and take a step only if it leads down hill. 
-> - Another better way is to follow the direction of steepest decend, which is the **gradient** or **derivative** of loss function at one point, and the w and b can be updated by following the best direction (gradient) and a given step (known as learning rate). Obviously the learning rate will have big impact on our algorithm; we can only get a very small progress if learing rate is too small, however when making a bigger step, we may get a higher loss because the point maybe jump to the other side of the bowl-shaped line. So we could do some research here, e.g. how to decide the learning rate (try different values with validation method), maybe we could make it dynamically. Another potential problem here is that we use all the samples to complish just one update when taking compulation complex into account. One solution is to update the parameters according to the gradient of the error with respect to one single training example only. This alogrithm is called **stochastic gradient descent** or **online alogrithm**, and **batch gradient descent** for previous one. SGD often gets “close” to the minimum much faster than BGD, however it may never “converge” to the minimum. Another bonus is that it is possible to ensure that the parameters will converge to the global minimum rather then merely oscillate around the minimum.
+> - Another better way is to follow the direction of steepest decend, which is the **gradient** or **derivative** of loss function at one point, and the w and b can be updated by following the best direction (gradient) and a given step (known as learning rate). Obviously the learning rate will have big impact on our algorithm; we can only get a very small progress if learing rate is too small, however when making a bigger step, we may get a higher loss because the point maybe jump to the other side of the bowl-shaped line. So we could do some research here, e.g. how to decide the learning rate (try different values with validation method), maybe we could make it dynamically. Another potential problem here is that we use all the samples to complish just one update when taking compulation complex into account. One solution is to update the parameters according to the gradient of the error with respect to one single training example only. This alogrithm is called **stochastic gradient descent** or **online gradient decent**, and **batch gradient descent** for previous one. SGD often gets “close” to the minimum much faster than BGD, however it may never “converge” to the minimum. Another bonus is that it is possible to ensure that the parameters will converge to the global minimum rather then merely oscillate around the minimum.
 
 
 ## 5. Genralization for high dimension data
@@ -76,15 +76,28 @@ image:
 > $$L(w; x) =  \prod_{i = i}^m \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}})$$
 > 
 >Instead of maximizing $$L(w; x)$$, we can also maximize any strictly increasing function of $$L(w; x)$$, naturally we can instead maximez likelihood $$\ell (w; x)$$
+>
 > $$\begin{equation}
 	\begin{split} 
 > 	\ell (w; x) &= L(w; x) \\
 				&= \log \prod_{i = i}^m \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}}) \\
-				&= \sum_{(i=1)}^m \log \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}}) \\
-				&= m \log \frac{1}{\sqrt{2 \, \pi} \sigma} - \frac{1}{\sigma^2} \frac{1}{2} \sum_{(i=1)}^m (y^{(i)} - w^T x^{(i)})^2
+				&= \sum_{i=1}^m \log \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}}) \\
+				&= m \log \frac{1}{\sqrt{2 \, \pi} \sigma} - \frac{1}{\sigma^2} \frac{1}{2} \sum_{i=1}^m (y^{(i)} - w^T x^{(i)})^2
 >\end{split}
 	\end{equation}$$ 
 >
-> Because w are the only unknown parameters (assume $$\sigma$$ is known), we need only to minimize the second item $$\frac{1}{\sigma^2} \frac{1}{2} \sum_{(i=1)}^m (y^{(i)} - w^T x^{(i)})^2$$, which could be viewed as less-square loss.
+> Because w are the only unknown parameters (assume $$\sigma$$ is known), we need only to minimize the second item $$\frac{1}{\sigma^2} \frac{1}{2} \sum_{i=1}^m (y^{(i)} - w^T x^{(i)})^2$$, which could be viewed as less-square loss.
 >
-> When we see $$\sigma$$ as the unknown parameter, we could also calculate the "best" $$\sigma$$ to maximize the likelihood.
+> When we see $$\sigma$$ as the unknown parameter, we could also calculate the "best" $$\sigma$$ to maximize the likelihood. I think the assumption that all the point have the same $$\sigma$$ is too strong to some degree, so if they are not the same and depend on X, we can get a different loss function.
+
+## 7. Get your hands dirty and have fun
+> - Setup: I choose Python (ipython, numpy etc.)for implementation, and the result will be published in a Ipython notebook.
+> - Data: I use the data from linear regression exercise from Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml).
+
+
+
+
+
+
+
+
