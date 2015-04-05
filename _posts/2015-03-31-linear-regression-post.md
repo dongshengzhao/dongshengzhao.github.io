@@ -102,7 +102,7 @@ image:
 > - Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, [click here ]({{ site.url }}/implementation/LinearRegression.html) for the details
 > - Following is code to implement the batch and stochastic gradient decent alogrithms
 >
-> {% highlight python %}
+{% highlight python %}
 import numpy as np
 
 class LinearRegression:
