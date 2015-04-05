@@ -103,6 +103,7 @@ image:
 > - Following is code to implement the batch and stochastic gradient decent alogrithms
 >
 {% highlight python %}
+
 import numpy as np
 
 class LinearRegression:
