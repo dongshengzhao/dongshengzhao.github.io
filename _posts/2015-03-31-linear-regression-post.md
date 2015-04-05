@@ -53,13 +53,19 @@ image:
 >
 > Compute the gradient for all w:
 >
+> - Analytic gradient, using calculus to compute the gradient directly	
+> 
 > $$ \begin{equation}
 	 \begin{split} 
 	 \frac{\partial}{\partial w_j} L(w, x) &= \frac{\partial}{\partial w_j}  \frac{1}{2m} \sum_{i=1}^m  (f(x^{(i)}, w) 											  - y^{(i)})^2 \\ 
 	 									   &= \frac{1}{2m} \frac{\partial}{\partial w_j} \sum_{i=1}^m [(w_0 x_0^{(i)} + 	w_1 x_1^{(i)} + ... + w_n x_n^{(i)}) - y^{(i)}]^2 \\
-	 									   &= \frac{1}{m} \sum_{i=1}^m  (f(x^{(i)}, w) 											  - y^{(i)}) x_j
+	 									   &= \frac{1}{m} \sum_{i=1}^m  (f(x^{(i)}, w) 											  - y^{(i)}) x_j^{(i)}
 	\end{split}
 	\end{equation}$$
+> 
+> - Numerical gradient, which is an approximation approach based on the definition of derivatives (or gradient). The derivative of a 1-D function is the limit of the function with respect its input. When the function takes more than one parameters, the derivatives are called partial derivatives.
+> 
+> $$\frac{df(x)}{dx} = \lim_{h \rightarrow 0}  \frac{f(x + h) - f(x)}{h} = \lim_{h \rightarrow 0}  \frac{f(x + h) - f(x - h)}{2h} $$
 > 
 > Update w by gradient decient: $$ w_j := w_j - \alpha \frac{\partial}{\partial w_j} L(w, x)$$, this regression is also called **LMS** standing for “least mean squares”.
 >
@@ -91,9 +97,134 @@ image:
 > When we see $$\sigma$$ as the unknown parameter, we could also calculate the "best" $$\sigma$$ to maximize the likelihood. I think the assumption that all the point have the same $$\sigma$$ is too strong to some degree, so if they are not the same and depend on X, we can get a different loss function.
 
 ## 7. Get your hands dirty and have fun
-> - Setup: I choose Python (ipython, numpy etc.)for implementation, and the result will be published in a Ipython notebook.
-> - Data: I use the data from linear regression exercise from Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml).
 
+> - Data: I use the data from linear regression exercise from Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml).
+> - Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, [click here ]({{ site.url }}/implementation/LinearRegression.html) for the details
+> - Following is code to implement the batch and stochastic gradient decent alogrithms
+>
+> {% highlight python %}
+import numpy as np
+
+class LinearRegression:
+
+    def __init__(self):
+        self.W = None # set the weight vector
+
+    def train(self, X, y, method='bgd', learning_rate=1e-2, num_iters=100, verbose=False):
+        """
+        Train linear regression using batch gradient descent or stochastic gradient descent
+
+        Parameters
+        ----------
+        X: (D x N) array of training data, each column is a training sample with D-dimension.
+        y: (N, ) 1-dimension array of target data with length N. 
+        method: (string) determine wheter use 'bgd' or 'sgd'
+        learning_rate: (float) learning rate for optimization
+        num_iters: (integer) number of steps to take when optimization
+        verbose: (boolean) if True, print out the progress when optimization
+
+        Returns
+        -------
+        losses_history: (list) of losses at each training iteration
+        """
+        dim, num_train = X.shape
+
+        if self.W is None:
+            # initilize weights with small values
+            self.W = np.random.randn(1, dim) * 0.001 # [1, D]
+        losses_history = []
+
+        for i in xrange(num_iters):
+
+            if method == 'sgd':
+                # randomly choose a sample
+                idx = np.random.choice(num_train)
+                loss, grad = self.loss_grad( X[:, idx, np.newaxis], y[idx, np.newaxis])
+            else:
+                loss, grad = self.loss_grad(X, y)
+            losses_history.append(loss)
+
+            # Update weights using matrix computing (vectorized)
+            self.W -= learning_rate * grad
+
+            if verbose and i % (num_iters / 10) == 0:
+                print 'iteration %d / %d : loss %f' %(i, num_iters, loss)
+        return losses_history
+
+
+    def predict(self, X):
+        """
+        Predict value of y using trained weights
+
+        Parameters
+        ----------
+        X: (D x N) array of data, each column is a sample with D-dimension.
+
+        Returns
+        -------
+        pred_ys: (N, ) 1-dimension array of y for N sampels
+        """
+        pred_ys = self.W.dot(X)
+        return pred_ys
+
+
+    def loss_grad(self, X, y, vectorized=True):
+        """
+        Compute the loss and gradients
+
+        Parameters
+        ----------
+        The same as self.train function
+
+        Returns
+        -------
+        a tuple of two items (loss, grad)
+        loss: (float)
+        grad: (array) with respect to self.W 
+        """
+        if vectorized:
+            return linear_loss_grad(self.W, X, y)
+        else:
+            return linear_loss_grad_naive(self.W, X, y)
+
+
+def linear_loss_grad(W, X, y):
+    """
+    Compute the loss and gradients with weights, vectorized version
+
+    Parameters and Returns are the same as LinearRegression.loss_grad, except including W as parameter
+    """
+    # vectorized implementation 
+    num_train = X.shape[1]
+    f_mat = W.dot(X) # [1, D] * [D, N]
+    diff = f_mat - y # [1, N] - [1, N]
+    loss = 1.0 / (2 * num_train) * np.sum(diff * diff) # [1, N] * [N, 1] 
+    grad = 1.0 / num_train * diff.dot(X.T) # [1, N] * [N, D]
+    return (loss, grad)
+
+def linear_loss_grad_naive(W, X, y):
+    """
+    Compute the loss and gradients with weights, for loop version
+    """
+    num_train = X.shape[1]
+    loss = 0
+    grad = np.zeros_like(W) # [1, D]
+
+    for i in xrange(num_train):
+        sample_X = X[:, i] # a vector
+        f = 0
+        for j in xrange(W.shape[1]):
+            f += sample_X[j] * W[0, j]
+        diff = f - y[i]
+        loss += diff ** 2
+        for j in xrange(W.shape[1]):
+            grad[0, j] += diff * sample_X[j]
+            
+    loss = 1.0 / (2 * num_train) * loss
+    grad = 1.0 / (num_train) * grad
+    return (loss, grad)
+{% endhighlight %}
+> 
 
 
 
