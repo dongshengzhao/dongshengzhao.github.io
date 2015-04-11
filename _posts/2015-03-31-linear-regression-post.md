@@ -228,7 +228,7 @@ def linear_loss_grad_naive(W, X, y):
 
 ## 8. Summary
 > * We all should keep it in mind that linear regression is based on the assumption that the true model is linear or close to linear, so we should be very careful if we don't known the true model in advance. 
-> * Most people use least square error to indicate the loss of the linear model and it can be interpretated from  probabilistic aspect, i.e., assuming that the errors are distributed IID according to a Gaussian Distribution, the probability of y based on x (p(y|x)) for all the samples can be maximized to minimize the least square error. Of course, we can choose other loss function as long as it makes sense to measure the agreement between the predicted scores and the ground truth value.
+> * Most people use least square error to indicate the loss of the linear model and it can be interpretated from  probabilistic aspect, i.e., assuming that the errors are distributed IID according to a Gaussian Distribution, the probability of y based on x (`p(y|x)`) for all the samples can be maximized to minimize the least square error. Of course, we can choose other loss function as long as it makes sense to measure the agreement between the predicted scores and the ground truth value.
 > * We can use normal equation $$W = (X^T X)^{-1} X^T y$$ to compute W directly based on calculus, however it works slow when n is large, instead, gradient decent algorithm is more practical based on the bowl-shape of loss function. The basic idea is to reduce the loss step by step.
 > * For implementation, it is critical to use matrix calculation. Not only can it speed up the computation, but also can make code simpler and conciser when compared to naive loop version.
 
