@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Linear Regression Post
+title: Linear Regression
 description: "The basic linear regression alorithm"
 modified: 2015-03-31
 tags: [Machine Learning]
