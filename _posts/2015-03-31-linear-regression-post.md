@@ -33,7 +33,7 @@ image:
 >
 > Then what's kind of model we should use? Linear model may be a good choice because of its simplicity and ability to show the general trend.
 >
-> The next task is how to find the "best" line, such as \\(y \\) \\(\approx\\) \\(f(x, w, b) =  w x + b, \\) where w and b are the parameters of the function, in which w is called the **weight** and **b** is called bias, which doesn't interact with the actual data \\(x_i\\). In order to find the "best" line, we need to define "best" and measure it. Ideally we hope $$ y_i == f_i $$ for every sample i, so we can use the difference or loss ($$|y_i - f_i|$$, also called **L1 distance**) between the target $$y_i$$ and predicted $$f_i$$ for measurement for a sinle sample. When considering all the samples, we want to minimize the average loss \\(\frac{1}{m} \sum_{i=1}^m|f_i - y_i|\\) for all samples (m is the number of samples). Alternatively **L2 distance** can be used as well and the average loss is 
+> The next task is how to find the "best" line, such as \\(y \\) \\(\approx\\) \\(f(x, w, b) =  w x + b, \\) where w and b are the parameters of the function, in which w is called the **weight** and **b** is called bias, which doesn't interact with the actual data \\(x_i\\). In order to find the "best" line, we need to define "best" and measure it. Ideally we hope $$ y_i == f_i $$ for every sample i, so we can use the difference or loss ($$|y_i - f_i|$$, also called **L1 distance**) between the target $$y_i$$ and predicted $$f_i$$ for measurement for a single sample. When considering all the samples, we want to minimize the average loss \\(\frac{1}{m} \sum_{i=1}^m|f_i - y_i|\\) for all samples (m is the number of samples). Alternatively **L2 distance** can be used as well and the average loss is 
 >$$ L_2 = \frac{1}{m} \sum_i^m(f_i - y_i)^2, $$ of course other measurement could be used as well. 
 >
 > Next we need to find the w and b to minimize **L_2(w, b)**, i.e.  least-squares loss, which is an optimization problem. Because of quadratic formula, we can guess $$L_2$$ is has bowl-shaped appearance in 3-dimension that $$L_2$$ in fact is a [convex function](http://stanford.edu/%7Eboyd/cvxbook/). So based on college caculus，we can compute the partial derivative of w and b, then set them to be zero and compute the w and b (the bottom of the shape). 
@@ -99,7 +99,7 @@ image:
 ## 7. Get your hands dirty and have fun
 
 > - Data: I use the data from linear regression exercise from Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml).
-> - Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, [click here ]({{ site.url }}/implementation/LinearRegression.html) for the details
+> - Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, ***[click here ]({{ site.url }}/implementation/LinearRegression.html)*** for the details
 > - Following is code to implement the batch and stochastic gradient decent alogrithms
 >
 {% highlight python %}
@@ -225,6 +225,19 @@ def linear_loss_grad_naive(W, X, y):
     return (loss, grad)
 {% endhighlight %}
 > 
+
+## 8. Summary
+> * We all should keep it in mind that linear regression is based on the assumption that the true model is linear or close to linear, so we should be very careful if we don't known the true model in advance. 
+> * Most people use least square error to indicate the loss of the linear model and it can be interpretated from  probabilistic aspect, i.e., assuming that the errors are distributed IID according to a Gaussian Distribution, the probability of y based on x (p(y|x)) for all the samples can be maximized to minimize the least square error. Of course, we can choose other loss function as long as it makes sense to measure the agreement between the predicted scores and the ground truth value.
+> * We can use normal equation $$W = (X^T X)^{-1} X^T y$$ to compute W directly based on calculus, however it works slow when n is large, instead, gradient decent algorithm is more practical based on the bowl-shape of loss function. The basic idea is to reduce the loss step by step.
+> * For implementation, it is critical to use matrix calculation. Not only can it speed up the computation, but also can make code simpler and conciser when compared to naive loop version.
+
+
+## 9. Reference and further reading
+> * Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml)
+> * Andrew Ng's machine learing notes on [Stanford Engineering Everywhere (SEE)](http://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf)
+> * [Machine Learning Module](http://modulecatalogue.nottingham.ac.uk/Nottingham/asp/moduledetails.asp?year_id=000113&crs_id=021211) in the University of Nottingham
+
 
 
 
