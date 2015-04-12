@@ -81,11 +81,11 @@ image:
 >
 > $$L(w; x) =  \prod_{i = i}^m \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}})$$
 > 
->Instead of maximizing $$L(w; x)$$, we can also maximize any strictly increasing function of $$L(w; x)$$, naturally we can instead maximez likelihood $$\ell (w; x)$$
+>Instead of maximizing $$L(w; x)$$, we can also maximize any strictly increasing function of $$L(w; x)$$, naturally we can instead maximize likelihood $$ l(w; x)$$
 >
 > $$\begin{equation}
 	\begin{split} 
-> 	\ell (w; x) &= L(w; x) \\
+> 	l(w; x) &= L(w; x) \\
 				&= \log \prod_{i = i}^m \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}}) \\
 				&= \sum_{i=1}^m \log \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}}) \\
 				&= m \log \frac{1}{\sqrt{2 \, \pi} \sigma} - \frac{1}{\sigma^2} \frac{1}{2} \sum_{i=1}^m (y^{(i)} - w^T x^{(i)})^2

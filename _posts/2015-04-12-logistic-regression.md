@@ -60,19 +60,50 @@ image:
 > Compute the gradient for just one sample:
 >
 > $$ \begin{equation}
-	 \begin{split} 
-	 \frac{\partial}{\partial w_j} L(w) 
-	 &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  \frac{\partial}{\partial w_j} g(w^Tx) \\
-	 &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  g(w^Tx)(1 - g(w^Tx)) \frac{\partial}{\partial w_j} w^Tx \\
-	 &= (y(1-g(w^Tx)) - (1-y)g(w^Tx))x_j \\
-	 &= (y-h(x))x_j									   
-	\end{split}
-	\end{equation} $$
+     \begin{split} 
+     \frac{\partial}{\partial w_j} L(w) 
+     &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  \frac{\partial}{\partial w_j} g(w^Tx) \\
+     &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  g(w^Tx)(1 - g(w^Tx)) \frac{\partial}{\partial w_j} w^Tx \\
+     &= (y(1-g(w^Tx)) - (1-y)g(w^Tx))x_j \\
+     &= (y-h(x))x_j                                    
+    \end{split}
+    \end{equation} $$
 > 
-> Then we can use **batch decent algorithm** or **stochastic decent algorithm** to optimize **w**.
+> Then we can use **batch decent algorithm** or **stochastic decent algorithm** to optimize **w**, i.e, $$w := w + \alpha \frac{\partial}{\partial w_j} L(w) $$
+>
 > We can see that the gradient or partial derivative is the same as gradient of linear regression except for the h(x). We can get a better understanding of this when interpretating the loss function from probabilistic aspect.
 
 ## 6. Probabilistic interpretation
+> Let us regard the value of h(x) as the probability:
+>
+> $$ \begin{cases} P(y=1|x;w) = h(x) \\ P(y = 0 | x; w) = 1 - h(x) \end{cases} => P(y|x;w) = (h(x))^y(1-h(x))^{1-y}$$
+>
+> So the likelihood is:
+>
+> $$\begin{equation}
+     \begin{split} 
+     L(w) &= p(y|X; w) \\ 
+     &= \prod_{i = 1}^m p(y^{(i)}|x^{(i)};w) \\
+     &= \prod_{i = 1}^m (h(x^{(i)}))^{y^{(i)}} (1-h(x^{(i)}))^{1-y^{(i)}} \\
+     &= (y(1-g(w^Tx)) - (1-y)g(w^Tx))x_j \\
+     &= (y-h(x))x_j                                 
+    \end{split}
+    \end{equation}$$
+> 
+> And the log likelihood:
+> 
+>$$ \begin{equation}
+     \begin{split} 
+     l(w) = log(L(w))
+     &= \sum_{i = 1}^m y_{(i)} log(x^{(i)}) + (1 - y^{(i)}) log(1 - h(x^{(i)}))                            
+    \end{split}
+    \end{equation} $$
+>
+> This equation is the same as the the loss function when picking minus, so minimize the loss can be interpretated as maximize the likelihood of the y when given x `p(y|x)`. What's more, the value of h(x) can be interpretated as the probability of the sample to be classified to y = 1. I think this is why most people prefer sigmoid function for normalization, theoretically we can choose other functions that smoothly increase from 0 to 1.
+
+## 7. Get your hands dirty and have fun
+
+
 
 
 
