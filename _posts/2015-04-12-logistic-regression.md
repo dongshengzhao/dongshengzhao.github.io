@@ -15,4 +15,4 @@ image:
 
 ## 2. Basic idea
 > We could plot the data on a 2-D plane and try to figure out whethere there is any structure (see following figure).
-> ![Scatter Plot of Two variables]({{ site.url }}/images/logisticRegression/1.png "Figure 1")
+> ![Scatter Plot of Two variables]({{ site.url }}/images/logisticRegression/1.png =250x "Figure 1")
