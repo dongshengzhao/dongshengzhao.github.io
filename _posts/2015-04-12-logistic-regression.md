@@ -16,19 +16,39 @@ image:
 ## 2. Basic idea
 > We could plot the data on a 2-D plane and try to figure out whethere there is any structure of the data (see following figure).
 > 
->[Scatter Plot of Two variables]({{ site.url }}/images/logisticRegression/1.png "Figure 1")
-> From the particular example above, it is not hard to figure out we could find a line to seperate the two classes. Specifically we divide the 2-D plane into 2 parts according to a line, and then we can predict new sample by observing which part it belongs to. Mathematically if $$ z = w_0 w_1x_1 w_2x_2$$ >= 0, then y = 1; if $$ z = w_0 w_1x_1 w_2x_2$$ < 0, then y = 0.
+>![Scatter Plot of Two variables]({{ site.url }}/images/logisticRegression/1.png "Figure 1")
+>
+> From the particular example above, it is not hard to figure out we could find a line to seperate the two classes. Specifically we divide the 2-D plane into 2 parts according to a line, and then we can predict new sample by observing which part it belongs to. Mathematically if $$ z = w_0 + w_1x_1 + w_2x_2$$ >= 0, then y = 1; if $$ z = w_0 + w_1x_1 + w_2x_2$$ < 0, then y = 0.
 
 ## 3. How to find the best line
-> The hypothesis is a linear model $$ w_0 w_1x_1 w_2x_2 = W_TX $$, the threshold is z = 0. The value of z depends on the distance between the point and the target line, and the absolute value of z could be very large and small. We could **normalize the distances ** for convience, however, we had better not use linear normalization such as x / (max(x) - min(x)) and x / (std(x)), because the distinction between the two classes is more obvious when the absolution value of z is larger. Sigmoid or logistic function is well-known to be used here, following is the function and plot of sigmoid function.
+> The hypothesis is a linear model $$ w_0 + w_1x_1 + w_2x_2 = W^TX $$, the threshold is z = 0. The value of z depends on the distance between the point and the target line, and the absolute value of z could be very large and small. We could **normalize the distances** for convience, however, we had better not use linear normalization such as x / (max(x) - min(x)) and x / (std(x)), because the distinction between the two classes is more obvious when the absolution value of z is larger. Sigmoid or logistic function is well-known to be used here, following is the function and plot of sigmoid function.
 >
 > $$ g(z) = \frac{1}{1 + e^{-z}} $$
 >
+> ![Sigmoid function]({{ site.url }}/images/logisticRegression/2.png "Figure 2")
+>
 > The new model for classification is:
 >
-> $$ g(x) = \frac{1}{1 + e^{-W^TX}} $$
+> $$ h(x) = \frac{1}{1 + e^{-w^Tx}} $$
+> We can see from the figure above that when z > 0, g(z) > 0.5 and when the absolute vaule of v is very large the g(z) is more close to 1. 
+
+## 4. Find out the loss function
+> we need to find a way to measure the agreement between the predicted scores and the ground truth value.
 >
-> [Sigmoid function]({{ site.url }}/images/logisticRegression/2.png "Figure 2")
+> * ##### Naive idea
+> We could use least square loss after normalizing the training data, the result is as following:
+> $$L_0 = \frac{1}{m} \sum_i^m(h(x^{(i)}) - y^{(i)})^2 = \frac{1}{m} \sum_i^m(\frac{1}{1 + e^{-w^Tx^{(i)}}} - y^{(i)})^2$$, where $$x^{(i)}$$ is a vector for all $$x_j$$ (j=0,1, ... , n), and $$y^{(i)}$$ is the target value for this example. However this loss function is not a convex function because of sigmoid function used here, which will make it very difficult to find the w to opimize the loss.
+> * ##### Can we do better?
+> Because of this is a binary classification problems, we can compute the loss for the two classes respectively. When target y = 1, the loss had better be very large when $$ h(x) = \frac{1}{1 + e^{-w^Tx}} $$ is close to zero, and the loss should be very small when h(x) is close to one; in the same way, when target y = 0, the loss had better be very small when h(x) is close to zero, and the loss should be very large when h(x) is close to one. In fact, we can find this kind of function: 
+>
+>$$ L(h(x), y) =\begin{cases} -log(h(x)) & y = 1\\ -log(1 - h(x)) & y  = 0 \end{cases}$$
+> 
+>$$h(x) = \frac{1}{1 + e^{-w^Tx}} $$
+>
+> The plots of loss function are shown below.
+>
+> ![Loss function]({{ site.url }}/images/logisticRegression/3.png "Figure 3")
+> 
 
 
 
