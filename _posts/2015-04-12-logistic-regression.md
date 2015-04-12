@@ -32,7 +32,7 @@ image:
 > $$ h(x) = \frac{1}{1 + e^{-w^Tx}} $$
 > We can see from the figure above that when z > 0, g(z) > 0.5 and when the absolute vaule of v is very large the g(z) is more close to 1. 
 
-## 4. Find out the loss function
+## 4. Figure out the loss function
 > we need to find a way to measure the agreement between the predicted scores and the ground truth value.
 >
 > **Naive idea**
@@ -44,13 +44,18 @@ image:
 >
 > Because of this is a binary classification problems, we can compute the loss for the two classes respectively. When target y = 1, the loss had better be very large when $$ h(x) = \frac{1}{1 + e^{-w^Tx}} $$ is close to zero, and the loss should be very small when h(x) is close to one; in the same way, when target y = 0, the loss had better be very small when h(x) is close to zero, and the loss should be very large when h(x) is close to one. In fact, we can find this kind of function: 
 >
->$$ L(h(x), y) =\begin{cases} -log(h(x)) & y = 1\\ -log(1 - h(x)) & y  = 0 \end{cases}$$
+>$$ L(h(x), y) =\begin{cases} -log(h(x)) & y = 1\\ -log(1 - h(x)) & y  = 0 \end{cases} => L(h(x), y) = -ylog(h(x)) - (1-y)log(1-h(x))$$
+>
+>$$L(w) = - \frac{1}{m} \sum_i^m [y^{(i)}logh(x^{(i)}) + (1 - y^{(i)}) log(1-h(x^{(i)}))]$$
 > 
 >$$h(x) = \frac{1}{1 + e^{-w^Tx}} $$
 >
-> The plots of loss function are shown below.
+> The plots of loss function are shown below, and they meet the desirable properties discribed above.
 > ![Loss function]({{ site.url }}/images/logisticRegression/3.png "Figure 3")
-> 
+
+## 5 Find the w to minimize the loss
+> Like 
+>
 
 
 
