@@ -46,16 +46,35 @@ image:
 >
 >$$ L(h(x), y) =\begin{cases} -log(h(x)) & y = 1\\ -log(1 - h(x)) & y  = 0 \end{cases} => L(h(x), y) = -ylog(h(x)) - (1-y)log(1-h(x))$$
 >
->$$L(w) = - \frac{1}{m} \sum_i^m [y^{(i)}logh(x^{(i)}) + (1 - y^{(i)}) log(1-h(x^{(i)}))]$$
+>So the total loss: $$L(w) = - \frac{1}{m} \sum_i^m [y^{(i)}logh(x^{(i)}) + (1 - y^{(i)}) log(1-h(x^{(i)}))]$$
+> 
+> $$x^{(i)}$$ is a vector for all $$x_j$$ (j=0,1, ... , n), and $$y^{(i)}$$ is the target value for this example. 
 > 
 >$$h(x) = \frac{1}{1 + e^{-w^Tx}} $$
 >
 > The plots of loss function are shown below, and they meet the desirable properties discribed above.
 > ![Loss function]({{ site.url }}/images/logisticRegression/3.png "Figure 3")
 
-## 5 Find the w to minimize the loss
-> Like 
+## 5 Find the best w to minimize the loss
+> Like [linear regression]({{ site.url }}/linear-regression-post/) we can use **gradient descent algorithm** to optimize w step by step.
+> Compute the gradient for just one sample:
 >
+> $$ \begin{equation}
+	 \begin{split} 
+	 \frac{\partial}{\partial w_j} L(w) 
+	 &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  \frac{\partial}{\partial w_j} g(w^Tx) \\
+	 &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  g(w^Tx)(1 - g(w^Tx)) \frac{\partial}{\partial w_j} w^Tx \\
+	 &= (y(1-g(w^Tx)) - (1-y)g(w^Tx))x_j \\
+	 &= (y-h(x))x_j									   
+	\end{split}
+	\end{equation} $$
+> 
+> Then we can use **batch decent algorithm** or **stochastic decent algorithm** to optimize **w**.
+> We can see that the gradient or partial derivative is the same as gradient of linear regression except for the h(x). We can get a better understanding of this when interpretating the loss function from probabilistic aspect.
+
+## 6. Probabilistic interpretation
+
+
 
 
 
