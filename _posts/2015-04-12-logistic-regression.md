@@ -35,10 +35,13 @@ image:
 ## 4. Find out the loss function
 > we need to find a way to measure the agreement between the predicted scores and the ground truth value.
 >
-> * ##### Naive idea
+> **Naive idea**
+>
 > We could use least square loss after normalizing the training data, the result is as following:
 > $$L_0 = \frac{1}{m} \sum_i^m(h(x^{(i)}) - y^{(i)})^2 = \frac{1}{m} \sum_i^m(\frac{1}{1 + e^{-w^Tx^{(i)}}} - y^{(i)})^2$$, where $$x^{(i)}$$ is a vector for all $$x_j$$ (j=0,1, ... , n), and $$y^{(i)}$$ is the target value for this example. However this loss function is not a convex function because of sigmoid function used here, which will make it very difficult to find the w to opimize the loss.
-> * ##### Can we do better?
+>
+> **Can we do better?**
+>
 > Because of this is a binary classification problems, we can compute the loss for the two classes respectively. When target y = 1, the loss had better be very large when $$ h(x) = \frac{1}{1 + e^{-w^Tx}} $$ is close to zero, and the loss should be very small when h(x) is close to one; in the same way, when target y = 0, the loss had better be very small when h(x) is close to zero, and the loss should be very large when h(x) is close to one. In fact, we can find this kind of function: 
 >
 >$$ L(h(x), y) =\begin{cases} -log(h(x)) & y = 1\\ -log(1 - h(x)) & y  = 0 \end{cases}$$
@@ -46,7 +49,6 @@ image:
 >$$h(x) = \frac{1}{1 + e^{-w^Tx}} $$
 >
 > The plots of loss function are shown below.
->
 > ![Loss function]({{ site.url }}/images/logisticRegression/3.png "Figure 3")
 > 
 
