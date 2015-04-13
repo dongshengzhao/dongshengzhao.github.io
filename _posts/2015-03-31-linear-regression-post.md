@@ -49,7 +49,7 @@ image:
 ## 5. Genralization for high dimension data
 > When there are more than 1 predictor variable, we just need to change the model as $$ y \approx f(x, w, b) = \sum_{j=1}^n x_j w_j + b = w^T x + b$$ (w and x are vector, and n is the number of features), in fact we can make the expression more compact by setting b = $$w_0$$ and $$x_0 = 1$$, then $$f(x, w) = w^T x.$$
 > 
-> The loss $$ L = \frac{1}{2m} \sum_{i=1}^m(f(x^{(i)}, w) - y^{(i)})^2$$, $$x^{(i)}$$ is a vector for all $$x_j$$ (j=0,1, ... , n), and $$y^{(i)}$$ is the target value for this example. 
+> The loss $$ L = \frac{1}{2m} \sum_{i=1}^m(f(x^{(i)}, w) - y^{(i)})^2$$, where $$x^{(i)}$$ is a vector for all features $$x_j^{(i)}$$ (j=0,1, ... , n) for single sample i, and $$y^{(i)}$$ is the target value for this example. 
 >
 > Compute the gradient for all w:
 >
