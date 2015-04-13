@@ -109,7 +109,7 @@ image:
 > * ##### Basic idea -- Transfer multi-class classification into binary classification problem
 > We need change multiple classes into two classes, and the idea is to construct several logistic classifier for each class. We set the value of y (label) of one class to 1, and 0 for other classes. Thus, if we have K classes, we build K logistic classifiers and use it for prediction. There is a potential problem that one sample might be classified to several classes or non-class. The solution is to compare all the values of h(x) and classify the sample to the class with the highest value of h(x). The idea is shown in following figure.
 >
-> ![One vs all]({{ site.url }}/images/logisticRegression/4.png "Figure 4")
+>![One vs all]({{ site.url }}/images/logisticRegression/4.png "Figure 4")
 >
 > * #### Better idea -- Softmax
 
