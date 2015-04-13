@@ -95,13 +95,20 @@ image:
 >$$ \begin{equation}
      \begin{split} 
      l(w) = log(L(w))
-     &= \sum_{i = 1}^m y_{(i)} log(x^{(i)}) + (1 - y^{(i)}) log(1 - h(x^{(i)}))                            
+     &= \sum_{i = 1}^m y^{(i)} log(x^{(i)}) + (1 - y^{(i)}) log(1 - h(x^{(i)}))                            
     \end{split}
     \end{equation} $$
 >
 > This equation is the same as the the loss function when picking minus, so minimize the loss can be interpretated as maximize the likelihood of the y when given x `p(y|x)`. What's more, the value of h(x) can be interpretated as the probability of the sample to be classified to y = 1. I think this is why most people prefer sigmoid function for normalization, theoretically we can choose other functions that smoothly increase from 0 to 1.
+>
+> After we optimize the w, we get a line in 2-D space and the line is usually called decision boundary (h(x) = 0.5). We can also generalize to binary classification on n-D space, and the corresponding decision boundary is a (n-1) Dimension hyperplane (subspace) in n-D space.
 
-## 7. Get your hands dirty and have fun
+## 7. From binary to multiclass classification
+>
+>
+
+
+## 8. Get your hands dirty and have fun
 
 
 
