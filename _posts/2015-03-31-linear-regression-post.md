@@ -77,7 +77,7 @@ image:
 > 
 > Because we just use f(w, x) to **estimate** the target y and **expectation** is often used for estimation, so we can interpret $$f(w, x^{(i)}) = w^T x^{(i)}$$ as the expectation of estimation. So we could add an error term $$\epsilon^{(i)}$$ to previous experession, as a result $$ y = w^T x^{(i)} + \epsilon^{(i)}$$. Because the expectation could be higher or less than the target value, we could even assume all $$\epsilon^{(i)}$$ are distributed IID (independently and identically distributed) according to a Gaussian Distribution (also called a Normal distribution) with mean zero and some variance $$\sigma^2$$, i.e., $$\epsilon^{(i)} \sim \mathcal{N} (0,\sigma^2)$$, so $$y^{(i)} \sim \mathcal{N} (w^T x^{(i)},\sigma^2)$$
 > 
-> So far when given a vector **w** and all **$$x_j$$**, we can compute the propability of $$y^{(i)}$$ from the Gaussian Distribution. Naturally we want the maximize all the propability of $$y^{(i)}$$ at the same time, and this method is called maximum likelihood. The corresponding likelihood function is
+> So far when given a vector **w** and all **$$x_j$$**, we can compute the probability of $$y^{(i)}$$ from the Gaussian Distribution. Naturally we want the maximize all the probability of $$y^{(i)}$$ at the same time, and this method is called maximum likelihood. The corresponding likelihood function is
 >
 > $$L(w; x) =  \prod_{i = i}^m \frac{1}{\sqrt{2 \, \pi} \sigma} exp({-\frac{(y^{(i)} - w^T x^{(i)})^2}{2 \sigma^2}})$$
 > 
