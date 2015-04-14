@@ -103,14 +103,14 @@ image:
 >
 > After we optimize the w, we get a line in 2-D space and the line is usually called decision boundary (h(x) = 0.5). We can also generalize to binary classification on n-D space, and the corresponding decision boundary is a (n-1) Dimension hyperplane (subspace) in n-D space.
 
-## 7. Multiclass classification -- One vs all and Softmax
+## 7. Multiclass classification -- One vs all
 > We need to generalize to the multiple class case, that's to say, the value of y is not binary any more, instead y can equal to 0, 1, 2, ..., k.
 >
 > #### Basic idea -- Transfer multi-class classification into binary classification problem
 > We need change multiple classes into two classes, and the idea is to construct several logistic classifier for each class. We set the value of y (label) of one class to 1, and 0 for other classes. Thus, if we have K classes, we build K logistic classifiers and use it for prediction. There is a potential problem that one sample might be classified to several classes or non-class. The solution is to compare all the values of h(x) and classify the sample to the class with the highest value of h(x). The idea is shown in following figure (From Andrew's notes).
 > ![One vs all]({{ site.url }}/images/logisticRegression/4.png "Figure 4")
->
-> #### Can we do better? -- Softmax
+
+## 8. Can we do better? -- Softmax
 > In logistic regression classifier, we use linear function to map raw data (a sample) into a score z, which is feeded into logistic function for normalization, and then we interprete the results from logistic function as the probability of the "correct" class (y = 1). We just need a mapping function here because of just two classes (just need to decide whether one sample belongs to one class or not).
 > For mutilple classes problems (K categoires), it is possible to establish a mapping function for each class. As above we can simply use a linear mapping for all classes (K mapping function):
 >
@@ -149,11 +149,21 @@ image:
 >
 > After normalizing the scores, we can use the same concept to define the loss function, which should make the loss small when the normalized score of h(x) is large, and penlize more when h(x) is small. Thus, we can use $$-log(h(x))$$ to compute the loss, and the loss for one sample is as following:
 >
-> $$ L_i = -log \big(h(x^{(i)})\big) = -log \big(\frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big) $$
+> $$ L_i = -log \big(h(x^{(i)})\big) = -log \big(\frac{e^{f_{y_j}^{(i)}}} {\sum_{j = 1}^k e^{f_j^{(i)}}}\big) = -log \big(\frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big) $$
 >
+> #### Is there any problem with the loss function
+> When writing code to implement the softmax function in practice, we should first compute the intermediate terms $$e^{f_j}$$ to make the scores bigger and use a logarithm function to make the score smaller. However, the value of $$e^{f_j}$$ may be very large due to the exponentials and dividing large numbers could be numerically unstable, so we should make $$e^{f_j}$$ smaller before division. Here is the trick by multiply the numerator and denominator by a constant C:
+>
+> $$\frac{e^{f_{y_j}^{(i)}}} {\sum_{j = 1}^k e^{f_j^{(i)}}} = \frac{C e^{f_{y_j}^{(i)}}} {C \sum_{j = 1}^k e^{f_j^{(i)}}} = \frac{e^{f_{y_j}^{(i)} + logC}} {\sum_{j = 1}^k e^{f_j^{(i)} + logC}}$$
+>
+> Because we have the flexibility to choose any number of C, we can choose C to make $$ e^{f_j^{(i)}} + logC $$ small. A common choice for C is to set $$ logC = -max_jf_j^{(i)}$$. This trick makes the highest value of $$f_j^{(i)} + logC$$ to be zero and less than 0 for others. So the values of $$ e^{f_j^{(i)}} + logC $$ are restricted from 0 to 1, which should be more appropriate from division.
+> 
 > #### Probabilistic interpretation
 > We can interprete $$h(x) = P(y^{(i)}) = \frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} $$ as the normalized probability of assigned to the correct label $$y^{(i)}$$ given sample x^{(i)} and parameters **W**. Firstly the score $$f(x^{(i)}, W) = Wx^{(i)} $$ can be interpreted as the unnormalized log probabilities. Then exponentiating the scores with on-linear function $$e^x$$ gives the unnormalized probabilities (may call frequency). Last using division for normalization to make the probabilities sum to one. Like logistic regression, the minimize the negative log likelihood of the correct class can also be interpreted as performing **Maximum Likelihood Estimation**. The loss function can be also deduced from probabilistic theory like logistic regression, in fact linear regression, logistic regression and softmax regression all belong to [Generalized Linear Model](http://en.wikipedia.org/wiki/Generalized_linear_model). 
+> 
 >
+
+
 ## 8. Get your hands dirty and have fun
 
 
