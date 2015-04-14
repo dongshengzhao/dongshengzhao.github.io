@@ -21,7 +21,7 @@ image:
 > From the particular example above, it is not hard to figure out we could find a line to seperate the two classes. Specifically we divide the 2-D plane into 2 parts according to a line, and then we can predict new sample by observing which part it belongs to. Mathematically if $$ z = w_0 + w_1x_1 + w_2x_2$$ >= 0, then y = 1; if $$ z = w_0 + w_1x_1 + w_2x_2$$ < 0, then y = 0. We can regard the linear function $$w^Tx$$ as a mapping from raw sample data ($$x_1, x_2$$) to classes scores. Intuitively we wish that the "correct" class has a score that is higher than the scores of "incorrect" classes.
 
 ## 3. How to find the best line
-> The hypothesis is a linear model $$ w_0 + w_1x_1 + w_2x_2 = W^TX $$, the threshold is z = 0. The score value of z depends on the distance between the point and the target line, and the absolute value of z could be very large and small. We could **normalize the distances** for convience, however, we had better not use linear normalization such as x / (max(x) - min(x)) and x / (std(x)), because the distinction between the two classes is more obvious when the absolution value of z is larger. Sigmoid or logistic function is well-known to be used here, following is the function and plot of sigmoid function.
+> The hypothesis is a linear model $$ w_0 + w_1x_1 + w_2x_2 = W^TX $$, the threshold is z = 0. The score value of z depends on the distance between the point and the target line, and the absolute value of z could be very large or small. We could **normalize the distances** for convenience, however, we had better not use linear normalization such as x / (max(x) - min(x)) and x / (std(x)), because the distinction between the two classes is more obvious when the absolution value of z is larger. Sigmoid or logistic function is well-known to be used here, following is the function and plot of sigmoid function.
 >
 > $$ g(z) = \frac{1}{1 + e^{-z}} $$
 >
@@ -126,10 +126,10 @@ image:
 > Similar to logistic regression classifier, we need to normalize the scores from 0 to 1. However we should not use a linear normalization as discussed in the logistic regression because the bigger the score of one class is, the more chance the sample belong to this category. What's more, the chance is similar high when the scores are very large (see the plot of logistic function above).
 > Similar to logistic function, people use exponent function (non-linear) to preprocess the scores and then compute the percentage of each score in the sum of all the scores. What's more, the percentages can be interpreted as the probability of each class for one sample. Here is formula for the $$i^{th}$$ sample:
 >
-> $$h(x^{(i)}) = \frac{e^{w_j^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} $$
+> $$h(x^{(i)}) = \frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} $$
 >
 > Here is the plot of h(x) for two classes in 3D space, you can rotate the graph by clicking the arrows to get a better understanding the shape of the h(x).
-> Where $$x^{(i)}$$ is vector of all features of sample i, and $$w_j$$ is the weights for the $$j^{th}$$ class.
+> Where $$x^{(i)}$$ is vector of all features of sample i, $$w_j$$ is the weights for the $$j^{th}$$ class, and $$y_j$$ is the correct class for the $$i^{th}$$ sample.
 
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="600" height="700" id="function_plotter" align="middle">
   <param name="movie" value="http://dwudljvm154gg.cloudfront.net/graph3d.swf?lpf=e^x / (e^x%2Be^y)&lpxmin=-5&lpxmax=5&lpymin=-5&lpymax=5&lpzmin=0&lpzmax=1" />
@@ -138,9 +138,6 @@ image:
   <embed src="http://dwudljvm154gg.cloudfront.net/graph3d.swf?lpf=e^x / (e^x%2Be^y)&lpxmin=-3&lpxmax=3&lpymin=-3&lpymax=3&lpzmin=0&lpzmax=1" quality="high" bgcolor="#ffffff" width="700" height="750" name="function_plotter" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 
->
->
-> 
 >
 >So why exponent function? In my opinion, it is natually to come up with.
 >
@@ -152,10 +149,31 @@ image:
 >
 > After normalizing the scores, we can use the same concept to define the loss function, which should make the loss small when the normalized score of h(x) is large, and penlize more when h(x) is small. Thus, we can use $$-log(h(x))$$ to compute the loss, and the loss for one sample is as following:
 >
-> $$ -log \big(h(x^{(i)})\big) = -log \big(\frac{e^{w_j^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big) $$
+> $$ L_i = -log \big(h(x^{(i)})\big) = -log \big(\frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big) $$
 >
+> #### Probabilistic interpretation
+> We can interprete $$h(x) = P(y^{(i)}) = \frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} $$ as the normalized probability of assigned to the correct label $$y^{(i)}$$ given sample x^{(i)} and parameters **W**. Firstly the score $$f(x^{(i)}, W) = Wx^{(i)} $$ can be interpreted as the unnormalized log probabilities. Then exponentiating the scores with on-linear function $$e^x$$ gives the unnormalized probabilities (may call frequency). Last using division for normalization to make the probabilities sum to one. Like logistic regression, the minimize the negative log likelihood of the correct class can also be interpreted as performing **Maximum Likelihood Estimation**. The loss function can be also deduced from probabilistic theory like logistic regression, in fact linear regression, logistic regression and softmax regression all belong to [Generalized Linear Model](http://en.wikipedia.org/wiki/Generalized_linear_model). 
 >
 ## 8. Get your hands dirty and have fun
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
