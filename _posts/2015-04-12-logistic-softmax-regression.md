@@ -62,9 +62,9 @@ image:
 > $$ \begin{equation}
      \begin{split} 
      \frac{\partial}{\partial w_j} L(w) 
-     &= (y \frac{1}{f(w^Tx)} - (1-y)  \frac{1}{1 - f(w^Tx)})  \frac{\partial}{\partial w_j} f(w^Tx) \\
-     &= (y \frac{1}{f(w^Tx)} - (1-y)  \frac{1}{1 - f(w^Tx)})  f(w^Tx)(1 - f(w^Tx)) \frac{\partial}{\partial w_j} w^Tx \\
-     &= (y(1-f(w^Tx)) - (1-y)f(w^Tx))x_j \\
+     &= (y \frac{1}{h(w^Tx)} - (1-y)  \frac{1}{1 - h(w^Tx)})  \frac{\partial}{\partial w_j} h(w^Tx) \\
+     &= (y \frac{1}{h(w^Tx)} - (1-y)  \frac{1}{1 - h(w^Tx)})  h(w^Tx)(1 - h(w^Tx)) \frac{\partial}{\partial w_j} w^Tx \\
+     &= (y(1-h(w^Tx)) - (1-y)h(w^Tx))x_j \\
      &= (y-h(x))x_j                                    
     \end{split}
     \end{equation} $$
