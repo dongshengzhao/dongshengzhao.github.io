@@ -62,10 +62,10 @@ image:
 > $$ \begin{equation}
      \begin{split} 
      \frac{\partial}{\partial w_j} L(w) 
-     &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  \frac{\partial}{\partial w_j} g(w^Tx) \\
-     &= (y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  g(w^Tx)(1 - g(w^Tx)) \frac{\partial}{\partial w_j} w^Tx \\
-     &= (y(1-g(w^Tx)) - (1-y)g(w^Tx))x_j \\
-     &= (y-h(x))x_j                                    
+     &= -(y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  \frac{\partial}{\partial w_j} g(w^Tx) \\
+     &= -(y \frac{1}{g(w^Tx)} - (1-y)  \frac{1}{1 - g(w^Tx)})  g(w^Tx)(1 - g(w^Tx)) \frac{\partial}{\partial w_j} w^Tx \\
+     &= -(y(1-g(w^Tx)) - (1-y)g(w^Tx))x_j \\
+     &= (h(x)-y)x_j                                    
     \end{split}
     \end{equation} $$
 > 
