@@ -100,7 +100,7 @@ image:
 
 > - Data: I use the data from linear regression exercise from Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml).
 > - Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, ***[click here ]({{ site.url }}/implementation/LinearRegression.html)*** for the details
-> - Following is code to implement the batch and stochastic gradient decent alogrithms
+> - Following is code to implement the batch and stochastic gradient decent algorithms.
 >
 {% highlight python %}
 import numpy as np

@@ -151,6 +151,10 @@ image:
 >
 > $$ L_i = -log \big(h(x^{(i)})\big) = -log \big(\frac{e^{f_{y_j}^{(i)}}} {\sum_{j = 1}^k e^{f_j^{(i)}}}\big) = -log \big(\frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big) $$
 >
+> Total loss for all sample is:
+>
+> $$ L = \frac{1}{m} \sum_{i = 1}^m L_i = - \frac{1}{m} \sum_{i = 1}^m log \big(h(x^{(i)})\big) = - \frac{1}{m} \sum_{i = 1}^m log \big(\frac{e^{f_{y_j}^{(i)}}} {\sum_{j = 1}^k e^{f_j^{(i)}}}\big) = - \frac{1}{m} \sum_{i = 1}^m log \big(\frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big)$$
+>
 > #### Is there any problem with the loss function
 > When writing code to implement the softmax function in practice, we should first compute the intermediate terms $$e^{f_j}$$ to make the scores bigger and use a logarithm function to make the score smaller. However, the value of $$e^{f_j}$$ may be very large due to the exponentials and dividing large numbers could be numerically unstable, so we should make $$e^{f_j}$$ smaller before division. Here is the trick by multiply the numerator and denominator by a constant C:
 >
@@ -161,10 +165,25 @@ image:
 > #### Probabilistic interpretation
 > We can interprete $$h(x) = P(y^{(i)}) = \frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} $$ as the normalized probability of assigned to the correct label $$y^{(i)}$$ given sample x^{(i)} and parameters **W**. Firstly the score $$f(x^{(i)}, W) = Wx^{(i)} $$ can be interpreted as the unnormalized log probabilities. Then exponentiating the scores with on-linear function $$e^x$$ gives the unnormalized probabilities (may call frequency). Last using division for normalization to make the probabilities sum to one. Like logistic regression, the minimize the negative log likelihood of the correct class can also be interpreted as performing **Maximum Likelihood Estimation**. The loss function can be also deduced from probabilistic theory like logistic regression, in fact linear regression, logistic regression and softmax regression all belong to [Generalized Linear Model](http://en.wikipedia.org/wiki/Generalized_linear_model). 
 > 
+
+## 8. Regularization to avoid overfitting
+> In practice we often add a **regularization loss** to the loss function provided above to penalize large **weights** to improve generalization. The most common regularization penalty **R(W)** is the **L2** norm.
 >
+> $$R(W) =  \sum_k  \sum_d W_{k, d}^2 $$
+>
+> So the total loss is the **data loss** and the **regularization loss**, so the full loss becomes:
+>
+> $$ L = \frac{1}{m} \sum_{i = 1}^m L_i + \lambda \sum_k  \sum_d W_{k, d}^2$$
+>  
+> The advantage of penalizing large weights is to improve generalization and make the trained model work well for unseen data, because it means that no input dimension can have a very large influence on the scores all by itself and the final classifier is encouraged to take into account allnput dimensions to small amounts rather than a few dimensions and very strongly.
+>
+> I have wrote **another posts** to discuss regularization in more details, especially how to interprete it. You can find the post [here]()
 
-
-## 8. Get your hands dirty and have fun
+## 9. Get your hands dirty and have fun
+> * Purpose: Implement loistic regression and softmax regression classifer. 
+> * Data: CIFAR-10 dataset, consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. The data is availabe [here](http://www.cs.toronto.edu/~kriz/cifar.html)
+> * Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, ***[click here]({{ site.url }}/implementation/Logistic_Softmax.html)*** for the details.
+> * Following is code to implement the logistic and softmax classifers by gradient decent algorithm.
 
 
 
