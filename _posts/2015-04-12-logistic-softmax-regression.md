@@ -46,7 +46,7 @@ image:
 >
 >$$ L(h(x), y) =\begin{cases} -log(h(x)) & y = 1\\ -log(1 - h(x)) & y  = 0 \end{cases} => L(h(x), y) = -ylog(h(x)) - (1-y)log(1-h(x))$$
 >
->So the total loss: $$L(w) = - \frac{1}{m} \sum_i^m [y^{(i)}logh(x^{(i)}) + (1 - y^{(i)}) log(1-h(x^{(i)}))]$$
+>So the total loss: $$L(w) = - \frac{1}{m} \sum_{i = 1}^m [y^{(i)}logh(x^{(i)}) + (1 - y^{(i)}) log(1-h(x^{(i)}))]$$
 > 
 > $$x^{(i)}$$ is a vector for all $$x_j$$ (j=0,1, ... , n), and $$y^{(i)}$$ is the target value for this example. 
 > 
@@ -69,6 +69,10 @@ image:
     \end{split}
     \end{equation} $$
 > 
+> So the gradients are as following when considering all the samples:
+>
+> $$ \frac{\partial}{\partial w_j} L(w) = \frac{1}{m} \sum_{i = 1}^m (h(x)-y)x_j$$
+>
 > Then we can use **batch decent algorithm** or **stochastic decent algorithm** to optimize **w**, i.e, $$w := w + \alpha \frac{\partial}{\partial w_j} L(w) $$
 >
 > We can see that the gradient or partial derivative is the same as gradient of linear regression except for the h(x). We can get a better understanding of this when interpreting the loss function from probabilistic aspect.
@@ -84,9 +88,7 @@ image:
      \begin{split} 
      L(w) &= p(y|X; w) \\ 
      &= \prod_{i = 1}^m p(y^{(i)}|x^{(i)};w) \\
-     &= \prod_{i = 1}^m (h(x^{(i)}))^{y^{(i)}} (1-h(x^{(i)}))^{1-y^{(i)}} \\
-     &= (y(1-g(w^Tx)) - (1-y)g(w^Tx))x_j \\
-     &= (y-h(x))x_j                                 
+     &= \prod_{i = 1}^m (h(x^{(i)}))^{y^{(i)}} (1-h(x^{(i)}))^{1-y^{(i)}} \\                               
     \end{split}
     \end{equation}$$
 > 
@@ -173,17 +175,203 @@ image:
 >
 > So the total loss is the **data loss** and the **regularization loss**, so the full loss becomes:
 >
-> $$ L = \frac{1}{m} \sum_{i = 1}^m L_i + \lambda \sum_k  \sum_d W_{k, d}^2$$
+> $$ L = \frac{1}{m} \sum_{i = 1}^m L_i + \frac{1}{2} \lambda \sum_k  \sum_d W_{k, d}^2$$
 >  
-> The advantage of penalizing large weights is to improve generalization and make the trained model work well for unseen data, because it means that no input dimension can have a very large influence on the scores all by itself and the final classifier is encouraged to take into account allnput dimensions to small amounts rather than a few dimensions and very strongly.
+> The advantage of penalizing large weights is to improve generalization and make the trained model work well for unseen data, because it means that no input dimension can have a very large influence on the scores all by itself and the final classifier is encouraged to take into account allnput dimensions to small amounts rather than a few dimensions and very strongly. Note that biases do not have the sampe effect as other parameters and do not control the strength of influence of an input dimension. So some people only regularize the weights **W** but not the biases, however, I regularize both in the implementation both for simplicity and better performance. 
 >
-> I have wrote **another posts** to discuss regularization in more details, especially how to interprete it. You can find the post [here]()
+> I have written **another post** to discuss regularization in more details, especially how to interprete it. You can find the post [here]().
 
 ## 9. Get your hands dirty and have fun
 > * Purpose: Implement loistic regression and softmax regression classifer. 
 > * Data: CIFAR-10 dataset, consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. The data is availabe [here](http://www.cs.toronto.edu/~kriz/cifar.html)
-> * Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, ***[click here]({{ site.url }}/implementation/Logistic_Softmax.html)*** for the details.
-> * Following is code to implement the logistic and softmax classifers by gradient decent algorithm.
+> * Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook.
+>   * **[click here]({{ site.url }}/implementation/LogisticRegression.html)** for logistic regression classification.
+>   * **[click here]({{ site.url }}/implementation)** for logistic multi-classification by one-vs-all trick.
+>   * **[click here]({{ site.url }}/implementation)** for softmax multi-classification.
+> * Following is code to implement the logistic, one-vs-all and softmax classifers by gradient decent algorithm.
+
+> **classifiers: algorithms/classifiers.py**
+
+{% highlight python %}
+# file: algorithms/classifiers.py
+import numpy as np
+from algorithms.classifiers.loss_grad_logistic import * 
+
+class LinearClassifier:
+
+    def __init__(self):
+        self.W = None # set up the weight matrix 
+
+    def train(self, X, y, method='sgd', batch_size=200, learning_rate=1e-4,
+              reg = 1e3, num_iters=1000, verbose=False, vectorized=True):
+        """
+        Train linear classifer using batch gradient descent or stochastic gradient descent
+
+        Parameters
+        ----------
+        X: (D x N) array of training data, each column is a training sample with D-dimension.
+        y: (N, ) 1-dimension array of target data with length N.
+        method: (string) determine whether using 'bgd' or 'sgd'.
+        batch_size: (integer) number of training examples to use at each step.
+        learning_rate: (float) learning rate for optimization.
+        reg: (float) regularization strength for optimization.
+        num_iters: (integer) number of steps to take when optimization.
+        verbose: (boolean) if True, print out the progress (loss) when optimization.
+
+        Returns
+        -------
+        losses_history: (list) of losses at each training iteration
+        """
+
+        dim, num_train = X.shape
+        num_classes = np.max(y) + 1 # assume y takes values 0...K-1 where K is number of classes
+
+        if self.W is None:
+            # initialize the weights with small values
+            if self.__class__.__name__ == 'Logistic': # just need weights for one class
+                self.W = np.random.randn(1, dim) * 0.001
+            else: # weigths for each class
+                self.W = np.random.randn(num_classes, dim) * 0.001
+
+        losses_history = []
+
+        for i in xrange(num_iters):
+            if method == 'bgd':
+                loss, grad = self.loss_grad(X, y, reg, vectorized)
+            else:
+                # randomly choose a min-batch of samples
+                idxs = np.random.choice(num_train, batch_size, replace=False)
+                loss, grad = self.loss_grad(X[:, idxs], y[idxs], reg, vectorized) # grad => [K x D]
+            losses_history.append(loss)
+
+            # update weights
+            self.W -= learning_rate * grad # [K x D]
+            # print self.W
+            # print 'dsfad', grad.shape
+            if verbose and (i % 100 == 0):
+                print 'iteration %d/%d: loss %f' % (i, num_iters, loss)
+
+        return losses_history
+
+    def predict(self, X):
+        """
+        Predict value of y using trained weights
+
+        Parameters
+        ----------
+        X: (D x N) array of data, each column is a sample with D-dimension.
+
+        Returns
+        -------
+        pred_ys: (N, ) 1-dimension array of y for N sampels
+        """
+        pred_ys = np.zeros(X.shape[1])
+        scores = self.W.dot(X)
+        if self.__class__.__name__ == 'Logistic':
+            pred_ys = scores.squeeze() >=0 
+        else: # multiclassification
+            pred_ys = np.argmax(scores, axis=0)
+        return pred_ys
+
+    def loss_grad(self, X, y, reg, vectorized=True):
+        """
+        Compute the loss and gradients.
+
+        Parameters
+        ----------
+        The same as self.train()
+
+        Returns
+        -------
+        a tuple of two items (loss, grad)
+        loss: (float)
+        grad: (array) with respect to self.W
+        """
+        pass
+
+### Subclasses of linear classifier
+class Logistic(LinearClassifier):
+    """A subclass for binary classification using logistic function"""
+    def loss_grad(self, X, y, reg, vectorized=True):
+        if vectorized:
+            return loss_grad_logistic_vectorized(self.W, X, y, reg)
+        else:
+            return loss_grad_logistic_naive(self.W, X, y, reg)
+
+class Softmax(LinearClassifier):
+    """A subclass for multi-classicication using Softmax function"""
+    def loss_grad(self, X, y, reg, vectorized=True):
+        if vectorized:
+            return loss_grad_softmax_vectorized(self.W, X, y, reg)
+        else:
+            return loss_grad_softmax_naive(self.W, X, y, reg)
+
+{% endhighlight %}
+
+> **Function to compute loss and gradients for logistic classification: algorithms/classifiers/loss_grad_logistic.py**
+
+{% highlight python %}
+# file: algorithms/classifiers/loss_grad_logistic.py
+import numpy as np
+
+def loss_grad_logistic_naive(W, X, y, reg):
+    """
+    Compute the loss and gradients using logistic function 
+    with loop, which is slow.
+
+    Parameters
+    ----------
+    W: (1, D) array of weights, D is the dimension of one sample.
+    X: (D x N) array of training data, each column is a training sample with D-dimension.
+    y: (N, ) 1-dimension array of target data with length N.
+    reg: (float) regularization strength for optimization.
+
+    Returns
+    -------
+    a tuple of two items (loss, grad)
+    loss: (float)
+    grad: (array) with respect to self.W
+    """
+    dim, num_train = X.shape
+    loss = 0
+    grad = np.zeros_like(W) # [1, D]
+    for i in xrange(num_train):
+        sample_x = X[:, i]
+        f_x = 0
+        for idx in xrange(sample_x.shape[0]):
+            f_x += W[0, idx] * sample_x[idx]
+        h_x = 1.0 / (1 + np.exp(-f_x))
+        loss += y[i] * np.log(h_x) + (1 - y[i]) * np.log(1 - h_x)
+
+        loss = -loss
+        grad += (h_x - y[i]) * sample_x # [D, ]
+    loss /= num_train
+    loss += 0.5 * reg * np.sum(W * W) # add regularization
+
+    grad /= num_train
+    grad += reg * W # add regularization
+    return loss, grad
+
+def loss_grad_logistic_vectorized(W, X, y, reg):
+    """Compute the loss and gradients with weights, vectorized version"""
+    dim, num_train = X.shape
+    loss = 0
+    grad = np.zeros_like(W) # [1, D]
+    # print W
+    f_x_mat = W.dot(X) # [1, D] * [D, N]
+    h_x_mat = 1.0 / (1.0 + np.exp(-f_x_mat)) # [1, N]
+    loss = np.sum(y * np.log(h_x_mat) + (1 - y) * np.log(1 - h_x_mat))
+    loss = -1.0 / num_train * loss + 0.5 * reg * np.sum(W * W)
+    grad = (h_x_mat - y).dot(X.T) # [1, D]
+    grad = 1.0 / num_train * grad + reg * W
+    
+    return loss, grad
+
+{% endhighlight %}
+
+## 10. Summary
+> * 
+
 
 
 

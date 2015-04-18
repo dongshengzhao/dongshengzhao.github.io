@@ -9,7 +9,7 @@ class LinearRegression:
         """
         Train linear regression using batch gradient descent or stochastic gradient descent
 
-        Parameters
+        Inputs
         ----------
         X: (D x N) array of training data, each column is a training sample with D-dimension.
         y: (N, ) 1-dimension array of target data with length N. 
@@ -36,7 +36,7 @@ class LinearRegression:
                 # randomly choose a sample
                 idx = np.random.choice(num_train)
                 
-                loss, grad = self.loss_grad( X[:, idx, np.newaxis], y[idx, np.newaxis])
+                loss, grad = self.loss_grad(X[:, idx, np.newaxis], y[idx, np.newaxis])
 
             else:
                 loss, grad = self.loss_grad(X, y)
@@ -55,7 +55,7 @@ class LinearRegression:
         """
         Predict value of y using trained weights
 
-        Parameters
+        Inputs
         ----------
         X: (D x N) array of data, each column is a sample with D-dimension.
 
@@ -72,8 +72,8 @@ class LinearRegression:
         """
         Compute the loss and gradients
 
-        Parameters
-        ----------
+        Inputs
+        ------
         The same as self.train function
 
         Returns
