@@ -68,14 +68,18 @@ class LinearClassifier:
         Returns
         -------
         pred_ys: (N, ) 1-dimension array of y for N sampels
+        h_x_mat: Normalized scores
         """
         pred_ys = np.zeros(X.shape[1])
-        scores = self.W.dot(X)
+        f_x_mat = self.W.dot(X)
         if self.__class__.__name__ == 'Logistic':
-            pred_ys = scores.squeeze() >=0 
+            pred_ys = f_x_mat.squeeze() >=0
         else: # multiclassification
-            pred_ys = np.argmax(scores, axis=0)
-        return pred_ys
+            pred_ys = np.argmax(f_x_mat, axis=0)
+        # normalized score
+        h_x_mat = 1.0 / (1.0 + np.exp(-f_x_mat)) # [1, N]
+        h_x_mat = h_x_mat.squeeze()
+        return pred_ys, h_x_mat
 
     def loss_grad(self, X, y, reg, vectorized=True):
         """

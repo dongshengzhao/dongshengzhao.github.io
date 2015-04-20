@@ -78,8 +78,3 @@ def loss_grad_logistic_vectorized(W, X, y, reg):
 
 
 
-
-
-
-
-

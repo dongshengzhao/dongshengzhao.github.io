@@ -2,7 +2,7 @@
 layout: post
 title: Logistic Regression
 description: "The logistic regression alorithm for binary classification"
-modified: 2015-04-12
+modified: 2015-04-19
 tags: [Machine Learning]
 image:
   feature: abstract-1.jpg
