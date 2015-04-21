@@ -32,7 +32,7 @@ class LinearClassifier:
 
         if self.W is None:
             # initialize the weights with small values
-            if self.__class__.__name__ == 'Logistic': # just need weights for one class
+            if num_classes == 2: # just need weights for one class
                 self.W = np.random.randn(1, dim) * 0.001
             else: # weigths for each class
                 self.W = np.random.randn(num_classes, dim) * 0.001
@@ -105,6 +105,7 @@ class Logistic(LinearClassifier):
             return loss_grad_logistic_vectorized(self.W, X, y, reg)
         else:
             return loss_grad_logistic_naive(self.W, X, y, reg)
+
 
 class Softmax(LinearClassifier):
     """A subclass for multi-classicication using Softmax function"""

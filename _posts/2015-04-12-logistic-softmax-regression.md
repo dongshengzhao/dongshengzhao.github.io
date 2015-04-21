@@ -186,7 +186,7 @@ image:
 > * Data: CIFAR-10 dataset, consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. The data is availabe [here](http://www.cs.toronto.edu/~kriz/cifar.html)
 > * Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook.
 >   * **[click here]({{ site.url }}/implementation/LogisticRegression.html)** for logistic regression classification.
->   * **[click here]({{ site.url }}/implementation)** for logistic multi-classification by one-vs-all trick.
+>   * **[click here]({{ site.url }}/implementation/One-vs-All-LogisticRegression.html)** for logistic multi-classification by one-vs-all trick.
 >   * **[click here]({{ site.url }}/implementation)** for softmax multi-classification.
 > * Following is code to implement the logistic, one-vs-all and softmax classifers by gradient decent algorithm.
 
