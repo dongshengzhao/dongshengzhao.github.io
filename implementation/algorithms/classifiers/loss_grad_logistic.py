@@ -30,9 +30,8 @@ def loss_grad_logistic_naive(W, X, y, reg):
         h_x = 1.0 / (1 + np.exp(-f_x))
         loss += y[i] * np.log(h_x) + (1 - y[i]) * np.log(1 - h_x)
 
-        loss = -loss
         grad += (h_x - y[i]) * sample_x # [D, ]
-    loss /= num_train
+    loss /= -num_train
     loss += 0.5 * reg * np.sum(W * W) # add regularization
 
     grad /= num_train
@@ -53,28 +52,5 @@ def loss_grad_logistic_vectorized(W, X, y, reg):
     grad = 1.0 / num_train * grad + reg * W
     
     return loss, grad
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
