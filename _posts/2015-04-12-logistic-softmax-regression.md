@@ -157,12 +157,28 @@ image:
 >
 > $$ L = \frac{1}{m} \sum_{i = 1}^m L_i = - \frac{1}{m} \sum_{i = 1}^m log \big(h(x^{(i)})\big) = - \frac{1}{m} \sum_{i = 1}^m log \big(\frac{e^{f_{y_j}^{(i)}}} {\sum_{j = 1}^k e^{f_j^{(i)}}}\big) = - \frac{1}{m} \sum_{i = 1}^m log \big(\frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big)$$
 >
+> #### Calculate the gradient (one sample)
+> 
+> $$
+  \begin{equation}
+  \begin{split} 
+      \nabla_{w_j} L_i &= - \nabla_{w_j} log \big(\frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}}\big) \\
+      &= -\nabla_{w_j} \big(w_{y_j}^Tx^{(i)}\big) + \nabla_{w_j} log \big(\sum_{j = 1}^k e^{w_j^Tx^{(i)}}\big)  \end{split}
+  \end{equation}
+  $$
+>
+> So the gradient with respect to $$w_{y_j}$$ ($$y_j$$ is the correct class):
+> $$\nabla_{w_{y_j}} = -x^{(i)} + \frac{e^{w_j^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} x^{(i)}$$
+>
+> The gradient with respect to $$w_j$$:
+> $$\nabla_{w_j} = \frac{e^{w_j^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} x^{(i)}$$
+> 
 > #### Is there any problem with the loss function
 > When writing code to implement the softmax function in practice, we should first compute the intermediate terms $$e^{f_j}$$ to make the scores bigger and use a logarithm function to make the score smaller. However, the value of $$e^{f_j}$$ may be very large due to the exponentials and dividing large numbers could be numerically unstable, so we should make $$e^{f_j}$$ smaller before division. Here is the trick by multiply the numerator and denominator by a constant C:
 >
 > $$\frac{e^{f_{y_j}^{(i)}}} {\sum_{j = 1}^k e^{f_j^{(i)}}} = \frac{C e^{f_{y_j}^{(i)}}} {C \sum_{j = 1}^k e^{f_j^{(i)}}} = \frac{e^{f_{y_j}^{(i)} + logC}} {\sum_{j = 1}^k e^{f_j^{(i)} + logC}}$$
 >
-> Because we have the flexibility to choose any number of C, we can choose C to make $$ e^{f_j^{(i)}} + logC $$ small. A common choice for C is to set $$ logC = -max_jf_j^{(i)}$$. This trick makes the highest value of $$f_j^{(i)} + logC$$ to be zero and less than 0 for others. So the values of $$ e^{f_j^{(i)}} + logC $$ are restricted from 0 to 1, which should be more appropriate from division.
+> Because we have the flexibility to choose any number of C, we can choose C to make $$ e^{f_j^{(i)}} + logC $$ small. A common choice for C is to set $$ logC = -max_jf_j^{(i)}$$. This trick makes the highest value of $$f_j^{(i)} + logC$$ to be zero and less than 0 for others. So the values of $$ e^{f_j^{(i)}} + logC $$ are restricted from 0 to 1, which should be more appropriate for division.
 > 
 > #### Probabilistic interpretation
 > We can interprete $$h(x) = P(y^{(i)}) = \frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} $$ as the normalized probability of assigned to the correct label $$y^{(i)}$$ given sample x^{(i)} and parameters **W**. Firstly the score $$f(x^{(i)}, W) = Wx^{(i)} $$ can be interpreted as the unnormalized log probabilities. Then exponentiating the scores with on-linear function $$e^x$$ gives the unnormalized probabilities (may call frequency). Last using division for normalization to make the probabilities sum to one. Like logistic regression, the minimize the negative log likelihood of the correct class can also be interpreted as performing **Maximum Likelihood Estimation**. The loss function can be also deduced from probabilistic theory like logistic regression, in fact linear regression, logistic regression and softmax regression all belong to [Generalized Linear Model](http://en.wikipedia.org/wiki/Generalized_linear_model). 
