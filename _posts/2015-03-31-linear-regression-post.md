@@ -10,6 +10,10 @@ image:
   creditli: http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/
 ---
 
+>This post dicusses how to come up with linear regression algorithm, specifically how to define the loss function and minimize the loss with gradient decent algorithm. I also implement the linear regression using Python (numpy) to do experiment with a datasets, and the result can be found in this [IPython notebook]({{ site.url }}/implementation/LinearRegression.html).
+
+<!-- more -->
+
 ## 1. Problem setting
 > We want to use a **predictor variable** X to predict a **quantitative response** Y, such as using living area (X) to predict the price (Y) of house. 
 
@@ -100,7 +104,7 @@ image:
 ## 7. Get your hands dirty and have fun
 
 > - Data: I use the data from linear regression exercise from Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml).
-> - Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, ***[click here ]({{ site.url }}/implementation/LinearRegression.html)*** for the details
+> - Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook, [click here ]({{ site.url }}/implementation/LinearRegression.html) for the details
 > - Following is code to implement the batch and stochastic gradient decent algorithms.
 >
 {% highlight python %}
