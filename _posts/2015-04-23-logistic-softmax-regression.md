@@ -483,7 +483,7 @@ def loss_grad_softmax_vectorized(W, X, y, reg):
 > * After defining the loss function, we can use the gradient descent algorithm to train the model.
 > * For implementation, it is critical to use matrix calculation, however it is not straightforward to transfer the naive loop version to vectorized version, which requires a very deep understanding of matrix multiplication. I've implemented the two algorithms to solve the CIFAR-10 dataset, and for test datasets I've got 82.95% accuracy for binary classification, 33.46% for all 10-classification using one-vs-all concept and 38.32% for all 10-classification using Softmax regression.
 
-## 9. Reference and further reading
+## 11. Reference and further reading
 > * Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml)
 > * Machine learing notes on [Stanford Engineering Everywhere (SEE)](http://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf)
 > * Stanford University open course [CS231n](http://vision.stanford.edu/teaching/cs231n/)
