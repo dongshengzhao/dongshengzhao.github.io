@@ -1,14 +1,18 @@
 ---
 layout: post
-title: Logistic Regression
+title: Logistic and Softmax Regression
 description: "The logistic regression alorithm for binary classification"
-modified: 2015-04-19
+modified: 2015-04-23
 tags: [Machine Learning]
 image:
   feature: abstract-1.jpg
   credit: dargadgetz
   creditli: http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/
 ---
+
+>In this post, I try to discuss how we could come up with the logistic and softmax regression for classificaiton. I also implement the algorithms for image classification with [CIFAR-10 dataset](http://www.cs.toronto.edu/~kriz/cifar.html) by Python (numpy). [The first one]({{ site.url }}/implementation/LogisticRegression.html)) is binary classification using logistic regression, [the second one]({{ site.url }}/implementation/One-vs-All-LogisticRegression.html) is multi-classifiction using logistic regression with one-vs-all trick and [the last one]({{ site.url }}/implementation/SoftmaxRegression.html)) is mutli-classification using softmax regression.
+
+<!-- more -->
 
 ## 1. Problem setting
 > Classification problem is to classify different objects into different categories. It is like regression problem, except that the predictor y just has a small number of discrete values. For simplicity, we just focus on **binary classification** that y can take two values 1 or 0 (indicating two classes). 
@@ -125,8 +129,8 @@ image:
 > Where **W** is a matrix of shape $$[K, D+1]$$, $$x^{(i)}$$ is vector of shape $$[D+1, 1]$$, and $$f(x^{(i)}, W)$$ is a vector of shape $$[K, 1]$$ indicating the different scores of every class for the $$i^{th}$$ sample.
 >
 > #### Find the loss function
-> Similar to logistic regression classifier, we need to normalize the scores from 0 to 1. However we should not use a linear normalization as discussed in the logistic regression because the bigger the score of one class is, the more chance the sample belong to this category. What's more, the chance is similar high when the scores are very large (see the plot of logistic function above).
-> Similar to logistic function, people use exponent function (non-linear) to preprocess the scores and then compute the percentage of each score in the sum of all the scores. What's more, the percentages can be interpreted as the probability of each class for one sample. Here is formula for the $$i^{th}$$ sample:
+> Similar to logistic regression classifier, we need to normalize the scores from 0 to 1. However we should not use a linear normalization as discussed in the logistic regression because the bigger the score of one class is, the more chance the sample belongs to this category. What's more, the chance is similar high when the scores are very large (see the plot of logistic function above).
+> Similar to logistic function, people use exponential function (non-linear) to preprocess the scores and then compute the percentage of each score in the sum of all the scores. What's more, the percentages can be interpreted as the probability of each class for one sample. Here is formula for the $$i^{th}$$ sample:
 >
 > $$h(x^{(i)}) = \frac{e^{w_{y_j}^Tx^{(i)}}} {\sum_{j = 1}^k e^{w_j^Tx^{(i)}}} $$
 >
@@ -141,13 +145,13 @@ image:
 </object>
 
 >
->So why exponent function? In my opinion, it is natually to come up with.
+>So why exponential function? In my opinion, it is natually to come up with.
 >
 > * It is a very simple and widely used non-linear function
 > * This function is strictly increasing
 > * This function is a convex function and its derivative is strictly increasing. That's to say, when the score is large, then make it even more larger.
 >
-> The lesson is that we should put exponent function in our toolbox for non-linear problems
+> The lesson is that we should put exponential function in our toolbox for non-linear problems
 >
 > After normalizing the scores, we can use the same concept to define the loss function, which should make the loss small when the normalized score of h(x) is large, and penlize more when h(x) is small. Thus, we can use $$-log(h(x))$$ to compute the loss, and the loss for one sample is as following:
 >
@@ -199,11 +203,11 @@ image:
 
 ## 9. Get your hands dirty and have fun
 > * Purpose: Implement loistic regression and softmax regression classifer. 
-> * Data: CIFAR-10 dataset, consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. The data is availabe [here](http://www.cs.toronto.edu/~kriz/cifar.html)
+> * Data: CIFAR-10 dataset, consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. The data is availabe [here](http://www.cs.toronto.edu/~kriz/cifar.html).
 > * Setup: I choose Python (IPython, numpy etc.) on Mac for implementation, and the results are published in a IPython notebook.
->   * **[click here]({{ site.url }}/implementation/LogisticRegression.html)** for logistic regression classification.
->   * **[click here]({{ site.url }}/implementation/One-vs-All-LogisticRegression.html)** for logistic multi-classification by one-vs-all trick.
->   * **[click here]({{ site.url }}/implementation)** for softmax multi-classification.
+>   * [click here]({{ site.url }}/implementation/LogisticRegression.html) for logistic regression classification.
+>   * [click here]({{ site.url }}/implementation/One-vs-All-LogisticRegression.html) for logistic multi-classification by one-vs-all trick.
+>   * [click here]({{ site.url }}/implementation/SoftmaxRegression.html) for softmax multi-classification.
 > * Following is code to implement the logistic, one-vs-all and softmax classifers by gradient decent algorithm.
 
 > **classifiers: algorithms/classifiers.py**
@@ -385,10 +389,105 @@ def loss_grad_logistic_vectorized(W, X, y, reg):
 
 {% endhighlight %}
 
+> **Function to compute loss and gradients for softmax classification: algorithms/classifiers/loss_grad_softmax.py**
+
+{% highlight python %}
+
+# file: algorithms/classifiers/loss_grad_softmax.py
+import numpy as np
+
+def loss_grad_softmax_naive(W, X, y, reg):
+    """
+    Compute the loss and gradients using softmax function 
+    with loop, which is slow.
+
+    Parameters
+    ----------
+    W: (K, D) array of weights, K is the number of classes and D is the dimension of one sample.
+    X: (D, N) array of training data, each column is a training sample with D-dimension.
+    y: (N, ) 1-dimension array of target data with length N with lables 0,1, ... K-1, for K classes
+    reg: (float) regularization strength for optimization.
+
+    Returns
+    -------
+    a tuple of two items (loss, grad)
+    loss: (float)
+    grad: (K, D) with respect to W
+    """
+    loss = 0
+    grad = np.zeros_like(W)
+    dim, num_train = X.shape
+    num_classes = W.shape[0]
+    for i in xrange(num_train):
+        sample_x = X[:, i]
+        scores = np.zeros(num_classes) # [K, 1] unnormalized score
+        for cls in xrange(num_classes):
+            w = W[cls, :]
+            scores[cls] = w.dot(sample_x)
+        # Shift the scores so that the highest value is 0
+        scores -= np.max(scores)
+        correct_class = y[i]
+        sum_exp_scores = np.sum(np.exp(scores))
+
+        corr_cls_exp_score = np.exp(scores[correct_class])
+        loss_x = -np.log(corr_cls_exp_score / sum_exp_scores)
+        loss += loss_x
+
+        # compute the gradient
+        percent_exp_score = np.exp(scores) / sum_exp_scores
+        for j in xrange(num_classes):
+            grad[j, :] += percent_exp_score[j] * sample_x
+
+
+        grad[correct_class, :] -= sample_x # deal with the correct class
+
+    loss /= num_train
+    loss += 0.5 * reg * np.sum(W * W) # add regularization
+    grad /= num_train
+    grad += reg * W
+    return loss, grad
+
+def loss_grad_softmax_vectorized(W, X, y, reg):
+    """ Compute the loss and gradients using softmax with vectorized version"""
+    loss = 0 
+    grad = np.zeros_like(W)
+    dim, num_train = X.shape
+
+    scores = W.dot(X) # [K, N]
+    # Shift scores so that the highest value is 0
+    scores -= np.max(scores)
+    scores_exp = np.exp(scores)
+    correct_scores_exp = scores_exp[y, xrange(num_train)] # [N, ]
+    scores_exp_sum = np.sum(scores_exp, axis=0) # [N, ]
+    loss = -np.sum(np.log(correct_scores_exp / scores_exp_sum))
+    loss /= num_train
+    loss += 0.5 * reg * np.sum(W * W)
+
+    scores_exp_normalized = scores_exp / scores_exp_sum
+    # deal with the correct class
+    scores_exp_normalized[y, xrange(num_train)] -= 1 # [K, N]
+    grad = scores_exp_normalized.dot(X.T)
+    grad /= num_train
+    grad += reg * W
+
+    return loss, grad
+
+{% endhighlight %}
+
 ## 10. Summary
-> * 
+> * Logitic and softmax regression are similar and used to solve binary and multiple classification problems respectively. However, we can also use the logistic regression classifier to solve multi-classification based on one-vs-all trick.
+> * We should keep it in mind that logistic and softmax regression is based on the assumption that we can use a linear model to (roughly) distinguish different classes. So we should be very careful if we don’t known the distribution of the data.
+> * We use linear function to map the input X (such as image) to label scores y for each class: $$ scores = f(x^{(i)}, W, b) = Wx{(i)} + b $$. And then use the largest score for prediction. 
+> * Normalizing the scores from 0 to 1. Im my opinion here is the most fundamental idea of the losgistic and softmax regression (function): that is we use a non-linear (exponential function) instead of linear function for normalization. It is reasonable to interprete that the bigger the score of one class is, the even more chance the sample belongs to that category, and the it is better to make derivative strictly increasing (exponential function is an appropriate condidate). Then we normalized the scores by computing the perentage of exponent score of each class in total exponent scores for all classes.
+> * As for loss function, the idea is to make the loss small when the normalized score is large, and penlize more when normalized score is small. it is not hard to figure out to using $$-log(x)$$ function because we use exponential function to preprocess the scores.
+> * After defining the loss function, we can use the gradient descent algorithm to train the model.
+> * For implementation, it is critical to use matrix calculation, however it is not straightforward to transfer the naive loop version to vectorized version, which requires a very deep understanding of matrix multiplication. I've implemented the two algorithms to solve the CIFAR-10 dataset, and for test datasets I've got 82.95% accuracy for binary classification, 33.46% for all 10-classification using one-vs-all concept and 38.32% for all 10-classification using Softmax regression.
 
-
+## 9. Reference and further reading
+> * Andrew Ng's [Machine learning on Coursera](https://www.coursera.org/course/ml)
+> * Machine learing notes on [Stanford Engineering Everywhere (SEE)](http://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf)
+> * Stanford University open course [CS231n](http://vision.stanford.edu/teaching/cs231n/)
+> * The University of Nottingham [Machine Learning Module](http://modulecatalogue.nottingham.ac.uk/Nottingham/asp/moduledetails.asp?year_id=000113&crs_id=021211)
 
 
 

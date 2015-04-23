@@ -1,5 +1,6 @@
 import numpy as np
-from algorithms.classifiers.loss_grad_logistic import * 
+from algorithms.classifiers.loss_grad_logistic import *
+from algorithms.classifiers.loss_grad_softmax import *
 
 class LinearClassifier:
 
@@ -97,7 +98,8 @@ class LinearClassifier:
         """
         pass
 
-### Subclasses of linear classifier
+
+# Subclasses of linear classifier
 class Logistic(LinearClassifier):
     """A subclass for binary classification using logistic function"""
     def loss_grad(self, X, y, reg, vectorized=True):

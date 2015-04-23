@@ -9,7 +9,7 @@ def loss_grad_logistic_naive(W, X, y, reg):
     Parameters
     ----------
     W: (1, D) array of weights, D is the dimension of one sample.
-    X: (D x N) array of training data, each column is a training sample with D-dimension.
+    X: (D, N) array of training data, each column is a training sample with D-dimension.
     y: (N, ) 1-dimension array of target data with length N.
     reg: (float) regularization strength for optimization.
 
@@ -52,5 +52,8 @@ def loss_grad_logistic_vectorized(W, X, y, reg):
     grad = 1.0 / num_train * grad + reg * W
     
     return loss, grad
+
+
+
 
 
