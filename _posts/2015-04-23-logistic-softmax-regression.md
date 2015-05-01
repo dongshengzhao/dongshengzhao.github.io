@@ -109,6 +109,8 @@ image:
 >
 > After we optimize the w, we get a line in 2-D space and the line is usually called decision boundary (h(x) = 0.5). We can also generalize to binary classification on n-D space, and the corresponding decision boundary is a (n-1) Dimension hyperplane (subspace) in n-D space.
 
+<a name='multiclass'></a>
+
 ## 7. Multiclass classification -- One vs all
 > We need to generalize to the multiple class case, that's to say, the value of y is not binary any more, instead y can equal to 0, 1, 2, ..., k.
 >
