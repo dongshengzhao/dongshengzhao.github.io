@@ -10,9 +10,11 @@ image:
   creditli: http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/
 ---
 
-<!-- > Support vector machine (SVM) is often considered one of the best “out of the box” classifiers, and in this post I try to explain how we can come up with this alogrithm from scratch. I also implement the SMV for image classification with [CIFAR-10 dataset](http://www.cs.toronto.edu/~kriz/cifar.html) by Python (numpy). [The first one]({{ site.url }}) is binary classification, [the second one]({{ site.url }}) is multi-classifiction using binary SVMs with one-vs-all trick and [the last one]({{ site.url }}) is mutli-classification SVM.
- -->
-<!-- more -->
+> Support vector machine (SVM) is often considered one of the best “out of the box” classifiers, and in this post I try to explain how we can come up with this alogrithm from scratch. 
+
+<!-- I also implement the SMV for image classification with [CIFAR-10 dataset](http://www.cs.toronto.edu/~kriz/cifar.html) by Python (numpy). [The first one]({{ site.url }}) is binary classification, [the second one]({{ site.url }}) is multi-classifiction using binary SVMs with one-vs-all trick and [the last one]({{ site.url }}) is mutli-classification SVM.
+
+ --><!-- more -->
 
 ## 1. Problem setting
 > Classification problem is to classify different objects into different categories. For simplicity, we just focus on **binary classification** that y can take two values 1 or -1 (indicating two classes), and we firstly assume the two classes are linearly separable. After all, it is reasonable to solve problems from simple to complex.
@@ -150,13 +152,13 @@ image:
 ## 5 The Non-separable Case
 > The SVMs work very well for classification if a separating hyperplane exists, however, we will get stuck when the data is overlaped and non-separable because there is no max margin. So we can extend the seperateing hyperplane in order to almost serperate the classes based on soft margin. We instead allow some observations to be on the incorrect side of the margin, or even the incorrect side of the hyperplane. We reformulate the optimization problem as follows:
 >
-> $$Minimize_w \:\:\: \frac{1}{2}\|w\|^2 + C \sum{i=1}^m \zeta_i $$ 
+> $$Minimize_w \:\:\: \frac{1}{2}\|w\|^2 + C \sum_{i=1}^m \zeta_i $$ 
 >
 > Subject to 
 >
 > $$y^{(i)} (W^Tx^{(i)}) >= 1 -\zeta_i \:\: \forall i = 1, 2, ..., m $$ 
 >
->Thus, we permit the observation to be on the incorrect side of the margin, or even the incorrect side of the hyperplane (1-$$\zeta_i < 0), and we pay a cost of the objective function being increased by $$C\zeta_i$$. The big number C ensuring that $$\zeta_i$$ is small and most examples have at least soft max margin.
+>Thus, we permit the observation to be on the incorrect side of the margin, or even the incorrect side of the hyperplane ($$1-\zeta_i < 0$$), and we pay a cost of the objective function being increased by $$C\zeta_i$$. The big number C ensuring that $$\zeta_i$$ is small and most examples have at least soft max margin.
 >
 >And the dual form is as follows:
 >
@@ -168,12 +170,90 @@ image:
 >
 >$$\sum_{i=1}^m \alpha_i y^{(i)} = 0$$
 >
+>Above is the basic idea of Support Vector Machine (SVM), all that remains is to to find a algorithm for solving the dual problem. The SMO (sequential minimal optimization) algorithm give an efficient way to solve the dual problem. You can find the details [here](http://cs229.stanford.edu/materials/smo.pdf).
+>
+
+## 6 Multiclass classification
+> We need to generalize to the multiple class case, that’s to say, the value of y is not binary any more, instead y can equal to 0, 1, 2, …, k.
+>
+> ####Transfer multi-class classification into binary classification problem
+>
+> We need change multiple classes into two classes, and the idea is to construct several logistic classifier for each class. We set the value of y (label) of one class to 1, and 0 for other classes. Thus, if we have K classes, we build K SVM and use it for prediction. The idea is the same as use [logistic regression](http://houxianxu.github.io/logistic-softmax-regression/#multiclass) for multi-classfication.
+> ![One vs all]({{ site.url }}/images/logisticRegression/4.png "Figure 4")
+>
+>#### Multiclass Support Vector Machine loss
+>Similar to [softmax](http://houxianxu.github.io/logistic-softmax-regression/), For mutilple classes problems (K categoires), it is possible to establish a mapping function for each class. We can simply use a linear mapping for all classes (K mapping function):
+>
+> $$ f(x^{(i)}, W, b) = Wx^{(i)} + b => f(x^{(i)}, W) = Wx^{(i)} \:(bias \: trick)$$
+> 
+>Intuitively we wish that the correct class has a score that is higher than the scores of incorrect classes. Thus, we can predict the test observation as the class with the higest score. Next we should find a loss function to optimize the parameters.
+>
+>For sample $$x_i$$, the vector $$f(x_i, W)$$ is the scores for all the classes, $$y_i$$ is the correct class and $$f(x_i, W)_{y_i}$$ is the score corresponding to the correct class for $$x_i$$. The score for the $$j^{th}$$ class is $$f(x_i, W)_j$$. The multiclass SVM loss for the $$i^{th}$ sample is as follows:
+>
+>$$\begin{equation}
+     \begin{split} 
+		L_i &= \sum_{j\neq y_i} max(0, f(x_i, W)_j - f(x_i, W)_{y_j} + \Delta) \\
+	   		&= \sum_{j\neq y_i} max(0, w_j^T x_i - w_{y_i}^T x_i + \Delta)
+	\end{split}
+    \end{equation}
+$$
+>
+>Though the expression seems complex, the interpretation is relatively simple. Firstly every class contribute to the loss of one sample, and the correct class doesn't lead to loss. We want the correct class for sample $$x_i$$ have a score $$f(x_i, W)_{y_j}$$ higher than the incorrect classes $$f(x_i, W)_j$$ by some fixed margin. If the incorrect class score adds some fix margin still less than correct class score, i.e., $$f(x_i, W)_j + \Delta > f(x_i, W)_{y_j}$$, then set the loss to be zero. Because the correct score is "much" big than than the incorrect scores, which we desire to achieve. However, if the the correct class score is not "big" enough or even less than the incorrect class scores, then we set the loss to be $$f(x_i, W)_j + \Delta - f(x_i, W)_{y_j}$$. Additionally the function max(0, -) is often called the **hinge loss**.
+>
+>We still need regularization to our loss function. Suppose that we've got a set of weights **W** that can correctly classify all the samples, then the set of **W** is not necessarily unique. Firstly if we multiply a number $$\lambda$$ **W**, then the decision boundary remains the same. So the scores stretches accordingly but the magin $$\Delta$$ doesn't change. Usually people add $$L_2$$ regularization penalty **R(W)** to loss function.
+>
+>$$R(W) = \sum_k \sum_l W_{k, l}^2$$
+>
+>So the full loss is as follows:
+>
+>$$\begin{equation}
+     \begin{split}  
+		L &= \frac{1}{m} \sum_i L_i + \lambda R(W) \\
+		  &= \frac{1}{m} \sum_i \sum_{j \neq y_{y_i}} [max(0, w_j^T x_i - w_{y_i}^T x_i + \Delta)] + \lambda \sum_k \sum_l W_{k, l}^2
+	\end{split}
+    \end{equation}$$
+>
+>When $$\lambda$$ is big, then $$R(W) = \sum_k \sum_l W_{k, l}^2$$ is small. From binary SVM above, we know that the distance between one observation and the hyperplane of correct class is $$ \frac{f(x_i, W)_{y_j}} {\|w_{k}\|}$$. therefore, the $$L_2$$ penalty leads to the **max margin** property in SVMs and improve the generalization of the performance of the classifiers and avoid overfitting.
+>
+>This loss function has no constrains and we can calculate the gradient and optimize the **W** using gradient descent algorithm.
+>For single example the SVM loss is:
+>
+>$$L_i = \sum_{j\neq y_i} max(0, w_j^T x_i - w_{y_i}^T x_i + \Delta)$$
+>
+>We can differentiate the function with respect to weights. For **w** corresponding to the correct class:
+>
+>$$\nabla_{w_{y_i}} L_i = - \big(\sum_{y \neq y_i} \mathbb{1}(w_j^T x_i - w_{y_i}^T x_i + \Delta > 0)\big) x_i$$
+>
+>The gradient for incorrect class:
+>
+>$$\nabla_{w_j} L_i = \mathbb{1}(w_j^T x_i - w_{y_i}^T x_i + \Delta > 0) x_i$$
+>
+>where $$\mathbb{1}$$ is the indicator function that is one if the condition is true or zero otherwise.
+
+## 7 Get your hands dirty and have fun
 
 
 <!-- ## New idea:
 - asymmetric prediction, max margins for two classes are different.
 - Two mimimal margin classifier
  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
