@@ -1,30 +1,30 @@
-title:            Xianxu Hou's Blog
+title:            Dongsheng Zhao's Blog
 description:      Blog for my PhD study!.
-disqus_shortname: houxianxu
+disqus_shortname: dongshengzhao
 reading_time:     true
 words_per_minute: 200
 exczerpt_separator: <!--more-->
 str_continue_reading: "Continue reading"
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
 # When testing locally leave blank or use http://localhost:4000
-url:              //houxianxu.github.io
+url:              //dongshengzhao.github.io
 
 # Owner/author information
 owner:
-  name:           Xianxu Hou
+  name:           Dongsheng Zhao
   avatar:         avatar.jpg
-  bio:            "A none-CS background student looks forward to exploring the CS world! \n Just another life-long learner!"
-  email:          hxianxu@gmail.com
+  bio:            "A new PhD candidate in GNSS"
+  email:          yaolongjiulu@gmail.com
   # Social networking links used in footer. Update and remove as you like.
   twitter:        
   facebook:       
-  github:         houxianxu
+  github:         
   stackexchange:  
   linkedin:       
   instagram:      
   flickr:         
   tumblr:   
-  weibo:          1918210797      
+  weibo:                
   # google plus id, include the '+', eg +mmistakes
   google_plus:    
 
