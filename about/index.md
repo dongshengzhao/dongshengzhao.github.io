@@ -1,6 +1,6 @@
 ---
 layout: page
-title: My name is Xianxu Hou
+title: Curriculum Vitae
 image:
   feature: abstract-5.jpg
   credit: dargadgetz
