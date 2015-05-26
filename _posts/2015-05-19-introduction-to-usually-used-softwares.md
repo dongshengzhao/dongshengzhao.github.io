@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Introduction To Usually Used Softwares
-description: "Introduction To Usually Used Softwares"
+title: Introduction To Usually Used Softwares in GNSS
+description: "Introduction To Usually Used Softwares in GNSS"
 modified: 2015-05-19
 tags: [GNSS]
 image:
