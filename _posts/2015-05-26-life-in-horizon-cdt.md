@@ -17,8 +17,9 @@ image:
 [Global Impact](#1)
 
 [Enabling Technologies](#2)
-<p id='1'></p> 
+
 <hr>
+<p id='1'></p> 
 <p id="para1">Global Impact</p>
 <!-- <p id='1'></p> -->
 <!-- <iframe src="https://drive.google.com/file/d/0B5_P7h0oQAeINU5iZVFoc3Q0RmM/view?usp=sharing" width="640" height="480"></iframe> -->
