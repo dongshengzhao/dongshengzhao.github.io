@@ -27,6 +27,11 @@ Receiver motion is another good way to mitigate multi-path and shorten the ambig
 
 However for the survey-grade antenna, motion provided little benefit. The reason for this is that there is a trade-off that occurs within the CDGPS filter. While the phase residuals do indeed decorrelate much faster when the antenna is moving, the filter can no longer use the knowledge that the antenna is static throughout data collection, a valuable constraint that it can apply to lower the time to ambiguity resolution. As it turns out, the survey grade antenna is already so good at mitigating multipath that the benefit of decorrelating what little multipath errors there are via antenna motion is approximately offset by no longer being able to assume that the static motion profile is known.
 
+The possible social application of this technique is as follows.
+>The researchers' new system could allow unmanned aerial vehicles to deliver packages to a specific spot on a consumer's back porch, enable collision avoidance technologies on cars and allow virtual reality (VR) headsets to be used outdoors. The researchers' new centimeter-accurate GPS coupled with a smartphone camera could be used to quickly build a globally referenced 3-D map of one's surroundings that would greatly expand the radius of a VR game. Currently, VR does not use GPS, which limits its use to indoors and usually a two- to three-foot radius. 
+
+![deliver package](/images/post_pics/150505083031_1_540x360.jpg "deliver package")
+
 The main sources used in this post are available as follows:
 
 K.M. Pesyna, R.W. Heath, and T.E. Humphreys, "Centimeter Positioning with a Smartphone-Quality GNSS Antenna," ION GNSS+, Tampa, FL, September 2014. [*pdf*](http://radionavlab.ae.utexas.edu/images/stories/files/papers/ion2014Pesyna.pdf)
